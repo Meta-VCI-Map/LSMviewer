@@ -110,7 +110,7 @@ class RequestResultViewSet(ViewSet):
             infarct_zVoxel = infarct_shape[7]
 
             '''load atlas data'''
-            coeff_file = f"{static_dir}/{'PSCI_location_impact_score_coefficients.nii'}"
+            coeff_file = f"{static_dir}/{'location_impact_score_atlas.nii'}"
             coeff_data = (nib.load(coeff_file)).get_fdata()
             coeff_info = (nib.load(coeff_file)).header
             coeff_shape = coeff_info['dim']
@@ -215,7 +215,7 @@ class RequestResultViewSet(ViewSet):
             infarct_zVoxel = infarct_shape[7]
 
             '''load atlas data'''
-            region_file = f"{static_dir}/{'AALvolumes_combined_new.nii'}"
+            region_file = f"{static_dir}/{'network_impact_score_combined_atlas.nii'}"
             region_data = (nib.load(region_file)).get_fdata()
             region_info = (nib.load(region_file)).header
             region_shape = region_info['dim']
