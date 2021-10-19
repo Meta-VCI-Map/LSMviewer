@@ -1,0 +1,286 @@
+<!-- templates/upload_image.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<title>Risk scores &#8211; Meta VCI Map</title>
+
+<h1>Desktop application</h1>
+<p>You can use the desktop version of the tool to get the scores for more than one files at once and a report of the results saved on your device. </p>
+<p>Download the application for your desktop
+<a href ="{% static 'risk scores desktop app v.3.zip' %}" class="wp-block-file__button" download>here</a>
+.</p>
+<br>
+
+<h1>Online risk scores calculator</h1>
+<p>The online tool offers 3D file viewers for the Location Impact Score and the Network Impact Score atlases as well as for the patient's infarct.</p>
+<p>Upload the binary mask of an infarct, choose the risk score you wish to calculate & press the button below to get the results.</p>
+
+<h5>Upload your file</h5>
+<form method="post" id="infarct" enctype="multipart/form-data">{% csrf_token %}
+   {{ form.as_p }}
+	<script>document.getElementById("uploaded").innerHTML = ""</script>
+    <button type="submit">Upload</button>
+</form>
+<br>
+
+<div id="uploaded"></div>
+
+{% if img_obj %}
+
+	<script>
+		document.getElementById("uploaded").innerHTML = "Successfully uploaded: {{ filename }} "</script>
+	<br><br>
+	<h3>Image viewer</h3>
+	<p>Make the binary mask more easily recognizable on the viewer, by maximizing the minimum value of the color range from the top right button menu</p>
+	<!-- Manage file upload  -->
+	<div class="papaya" data-params="papayaparams_userUpload" id="fileUpload">
+		<script type="text/javascript">
+			var papayaparams_userUpload = [];
+			papayaparams_userUpload["showOrientation"] = true;
+			papayaparams_userUpload["radiological"] = "Yes";
+			papayaparams_userUpload["showRuler"] = false;
+			papayaparams_userUpload["worldSpace"] = true;
+
+			papayaparams_userUpload["kioskMode"] = false; <!-- don't hide the toolbar -->
+			papayaparams_userUpload["showControlBar"] = false;
+			papayaparams_userUpload["showControls"] = true;
+			papayaparams_userUpload["showImageButtons"] = true;
+
+			papayaparams_userUpload["images"] = [
+									"\\static/MNI152_T1_1mm_brain_uint8.nii",
+									"\\media/{{ filename }}"
+									];
+		</script>
+	</div>
+	<script>
+		document.getElementById("fileUpload").style.visibility = "visible"
+		console.log( '{{ filename }}' )
+	</script>
+	<br><br>
+    <br><br>
+    <h3>Location Impact Score atlas</h3>
+    <div class="papaya" data-params="papayaparams"></div><p>&nbsp;</p>
+    <br><br>
+    <h3>Network Impact Score atlas</h3>
+    <div class="papaya" data-params="papayaparams_2"></div><p>&nbsp;</p>
+    <br>
+    <div class="wrap">
+        <h5>Choose the risk score:</h5>
+        <form method = "post" id="selection_form" style="width: 7cm !important; min-width: 7cm; max-width: 7cm;">
+            <select id="selectScore" name="selectname">
+                <option value="lis" id="option1">Location Impact Score</option>
+                <option value="nis" id="option2">Network Impact Score</option>
+            </select>
+        </form>
+        <br/>
+        <br/>
+        <input type="submit" value="Calculate" onclick="calculate_risk_score()">
+        <!--<button onclick="calculate_risk_score()">Calculate risk score</button>-->
+    </div>
+    <br/>
+    <script>
+        function calculate_risk_score(){
+            document.getElementById("downloadButton").style.visibility = "hidden";
+            document.getElementById("results_download").style.display = "none";
+
+            if(document.getElementById("selectScore").value == "lis"){
+                calculate_location_impact_score();
+            }
+            else
+                calculate_network_impact_score();
+            document.getElementById("fileUpload").style.visibility = "hidden";
+        }
+    </script>
+    <script type="text/javascript">
+        function calculate_location_impact_score() {
+            document.getElementById("results").innerHTML = ""
+
+            var table_title = "Location impact score of the 5-point scale and correspondence with the voxel-wise risk coefficient (ln(OR)*):"
+            var table_scale1 = "scale 1 &#8594 score range –1.25 to 0.25"
+            var table_scale2 = "scale 2 &#8594 score range 0.25 to 0.54"
+            var table_scale3 = "scale 3 &#8594 score range 0.54 to 0.83"
+            var table_scale4 = "scale 4 &#8594 score range 0.83 to 1.2"
+            var table_scale5 = "scale 5 &#8594 score range 1.22 to 2.44"
+            var table_notes = "* odds ratio"
+            var table_notes2 = "Note: highest scores indicate increased probabilities for post-stroke cognitive impairement"
+
+            console.log("ajax - location impact score")
+            post_data = {'infarct_image': {'filename': '{{ filename }}' }
+                }
+
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify(post_data),
+                url: "{% url 'lis_calculation' %}",
+
+                success: function (response) {
+
+                    var result = JSON.parse(response["LocationImpactScore"])
+
+                    if (result == -100)
+                        alert("The infarct file does not have the same number of dimensions with the atlas!");
+                    else if (result == -200)
+                        alert("The infarct file does not have the same shape with the atlas!");
+                    else if (result == -300)
+                        alert("The infarct file does not have the same voxels dimension with the atlas!");
+                    else if (result == -400)
+                        alert("The infarct file is not binary!");
+                    else if (result == -500)
+                        alert("Please upload a file to proceed.");
+                    else{
+                        document.getElementById("results").innerHTML = "The Location Impact Score is: "
+                        + result
+                        +"<br/> "
+                        +"<br/> "
+                        +"<br/> " + (table_title.fixed()).fontsize(5)
+                        +"<br/> " + table_scale1.fixed()
+                        +"<br/>	" + table_scale2.fixed()
+                        +"<br/>	" + table_scale3.fixed()
+                        +"<br/>	" + table_scale4.fixed()
+                        +"<br/>	" + table_scale5.fixed()
+
+                        +"<br/> "
+                        +"<br/> "
+                        +"<br/> " + table_notes2.fixed()
+                        +"<br/> " + table_notes.fixed()
+
+                        ;
+                    }
+                },
+
+            })
+        }
+    </script>
+    <script type="text/javascript">
+        var excel;
+        function calculate_network_impact_score() {
+            document.getElementById("results").innerHTML = ""
+
+            console.log("ajax - network impact score")
+            post_data = {'infarct_image': {'filename': '{{ filename }}' }
+                        }
+
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify(post_data),
+                url: "{% url 'nis_calculation' %}",
+                success: function (response) {
+                    var result = JSON.parse(JSON.stringify(response));
+
+                    if (result.NetworkImpactScore == -100)
+                        alert("The infarct file does not have the same number of dimensions with the atlas!");
+                    else if (result.NetworkImpactScore == -200)
+                        alert("The infarct file does not have the same shape with the atlas!");
+                    else if (result.NetworkImpactScore == -300)
+                        alert("The infarct file does not have the same voxels dimension with the atlas!");
+                    else if (result.NetworkImpactScore == -400)
+                        alert("The infarct file is not binary!");
+                    else if (result.NetworkImpactScore == 0){
+                            document.getElementById("results").innerHTML = "The Network Impact Score cannot be calculated!"
+                            + "<br/> "
+                            + "<br/> "
+                            + " The infarct does not overlap with any of the regions, "
+                            + "meaning that the patient has an isolated white matter or infratentorial infarct.";
+                    }
+                    else if (result.NetworkImpactScore == -500)
+                        alert("Please upload a file to proceed.");
+                    else{
+                        document.getElementById("results").innerHTML = "The Network Impact Score is: "
+                        + result.Log
+                        + "<br/> "
+                        + " and corresponds to the "
+                        + (result.MaxIndexRegionName).fixed()
+                        + " region"
+                        + "<br/> "
+                        + "<br/> "
+                        + "<br/> "
+                        ;
+                        excel = result.ExcelFilename
+                        download_file();
+                    }
+                },
+
+            })
+        }
+    </script>
+
+{% endif %}
+
+<div id="results"></div>
+<script type="text/javascript">
+	function download_file(){
+		document.getElementById("results_download").style.display = "block";
+		document.getElementById("results_download").innerHTML = "Do you want to download the results?"
+		+ "<br/> "
+		+ "<br/> "
+		;
+		document.getElementById("downloadButton").style.visibility = "visible";
+	}
+
+	function downloadFunction(){
+		post_data = {'ExcelFilename': excel }
+		$.ajax({
+			type: 'POST',
+			data: JSON.stringify(post_data),
+			url: "{% url 'download_file' %}",
+			success: function (response) {
+
+				var jsonInfo = JSON.parse(response.InfoFile)
+				var jsonFilename = JSON.parse(JSON.stringify(response.Filename))
+				var jsonExcelFilename = JSON.parse(JSON.stringify(response.ExcelFilename))
+
+				console.log(jsonInfo[jsonFilename]);
+				console.log(jsonInfo["Impact Score"]);
+				console.log( Object.keys(jsonInfo["Impact Score"]).length );
+
+				var createXLSLFormatObj = [];
+				var xlsRows = [];
+				var xlsHeader = [jsonFilename, "Network Impact Score"];
+
+
+				for(var i=0; i<Object.keys(jsonInfo["Impact Score"]).length; i++){
+					objRows = {
+							jsonFilename: jsonInfo[jsonFilename][i],
+							"Impact Score": jsonInfo["Impact Score"][i]
+							}
+					xlsRows.push(objRows);
+				}
+
+				createXLSLFormatObj.push(xlsHeader);
+				$.each(xlsRows, function(index, value) {
+				  var innerRowData = [];
+				  $("tbody").append('<tr><td>' + value.jsonFilename + '</td><td>' + value.ImpactScore + '</td></tr>');
+				  $.each(value, function(ind, val) {
+					innerRowData.push(val);
+				  });
+				  createXLSLFormatObj.push(innerRowData);
+				});
+
+				var filename = jsonExcelFilename;
+				var ws_name = "scores";
+
+				if (typeof console !== 'undefined') console.log(new Date());
+				var wb = XLSX.utils.book_new(),
+				  ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+
+				XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+				if (typeof console !== 'undefined') console.log(new Date());
+				XLSX.writeFile(wb, filename);
+				if (typeof console !== 'undefined') console.log(new Date());
+			},
+
+		})
+	}
+</script>
+<div id="results_download"></div>
+<button id="downloadButton" onclick="downloadFunction()">Download</button>
+<script>
+	document.getElementById('downloadButton').style.visibility = 'hidden';
+</script>
+
+
+
+{% endblock %}
