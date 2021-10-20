@@ -26,7 +26,7 @@ SECRET_KEY = '=o$stkugfc86p9-(d_cob)+aeh!c-)99aawh*4jbvxv-*cp%iq'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'http://metavcimap.org/lsmviewer'
+    # 'http://metavcimap.org/lsmviewer'
 ]
 
 
@@ -73,9 +73,9 @@ MIDDLEWARE = [
 
 INTERNAL_IPS = [
     # ...
-    # '127.0.0.1',
+    '127.0.0.1',
     # ...
-    'http://metavcimap.org/lsmviewer',
+    # 'http://metavcimap.org/lsmviewer',
 ]
 
 ROOT_URLCONF = 'LSMviewer.urls'
