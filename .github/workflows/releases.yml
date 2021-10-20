@@ -1,0 +1,13 @@
+name: Desktop Application
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@releases
+    - name: Desktop Application Release
+      uses: Meta-VCI-Map/LSMviewer/zip-release@releases
+      with:
+        type: 'zip'
+        filename: 'LSMviewer_DesktopApp.zip'
+        exclusions: '*.git* /*node_modules/* .editorconfig'
