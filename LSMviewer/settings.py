@@ -25,7 +25,9 @@ SECRET_KEY = '=o$stkugfc86p9-(d_cob)+aeh!c-)99aawh*4jbvxv-*cp%iq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'http://metavcimap.org/lsmviewer'
+]
 
 
 # Application definition
