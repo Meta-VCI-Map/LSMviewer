@@ -71,9 +71,9 @@ MIDDLEWARE = [
 
 INTERNAL_IPS = [
     # ...
-    # '127.0.0.1',
+    '127.0.0.1',
     # ...
-    'http://metavcimap.org/lsmviewer'
+    # 'http://metavcimap.org/lsmviewer'
 ]
 
 ROOT_URLCONF = 'LSMviewer.urls'
