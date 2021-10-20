@@ -173,7 +173,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/home/deb117379/django.log',
+            'filename': '/home/deb117379/logs/django.log',
         },
     },
     'loggers': {
