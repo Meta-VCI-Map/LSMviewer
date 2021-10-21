@@ -68,7 +68,7 @@
     <br>
     <div class="wrap">
         <h5>Choose the risk score:</h5>
-        <form method = "post" id="selection_form" style="width: 7cm !important; min-width: 7cm; max-width: 7cm;">
+        <form method = "post" id="selection_form" style="width: 7cm !important; min-width: 7cm; max-width: 7cm;">{% csrf_token %}
             <select id="selectScore" name="selectname">
                 <option value="lis" id="option1">Location Impact Score</option>
                 <option value="nis" id="option2">Network Impact Score</option>
@@ -107,11 +107,16 @@
             var table_notes2 = "Note: highest scores indicate increased probabilities for post-stroke cognitive impairement"
 
             console.log("ajax - location impact score")
+            var csrfToken = readCookie("csrftoken")
             post_data = {'infarct_image': {'filename': '{{ filename }}' }
-                }
+            }
+            console.log(csrfToken)
 
             $.ajax({
                 type: 'POST',
+                headers: {
+                    'X-CSRFToken':csrfToken,
+                },
                 data: JSON.stringify(post_data),
                 url: "{% url 'lis_calculation' %}",
 
@@ -161,9 +166,13 @@
             console.log("ajax - network impact score")
             post_data = {'infarct_image': {'filename': '{{ filename }}' }
                         }
+             var csrfToken = readCookie("csrftoken")
 
             $.ajax({
                 type: 'POST',
+                headers: {
+                    'X-CSRFToken':csrfToken,
+                },
                 data: JSON.stringify(post_data),
                 url: "{% url 'nis_calculation' %}",
                 success: function (response) {
@@ -210,6 +219,17 @@
 
 <div id="results"></div>
 <script type="text/javascript">
+    function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
 	function download_file(){
 		document.getElementById("results_download").style.display = "block";
 		document.getElementById("results_download").innerHTML = "Do you want to download the results?"
@@ -221,8 +241,12 @@
 
 	function downloadFunction(){
 		post_data = {'ExcelFilename': excel }
+		var csrfToken = readCookie("csrftoken")
 		$.ajax({
 			type: 'POST',
+			headers: {
+                    'X-CSRFToken':csrfToken,
+                },
 			data: JSON.stringify(post_data),
 			url: "{% url 'download_file' %}",
 			success: function (response) {
