@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '=o$stkugfc86p9-(d_cob)+aeh!c-)99aawh*4jbvxv-*cp%iq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    'http://metavcimap.org/lsmviewer'
+    # 'http://metavcimap.org/lsmviewer'
 ]
 
 
@@ -73,9 +73,9 @@ MIDDLEWARE = [
 
 INTERNAL_IPS = [
     # ...
-    # '127.0.0.1',
+    '127.0.0.1',
     # ...
-    'http://metavcimap.org/lsmviewer',
+    # 'http://metavcimap.org/lsmviewer',
 ]
 
 ROOT_URLCONF = 'LSMviewer.urls'
@@ -164,23 +164,23 @@ STATICFILES_FINDERS = (
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,"media/")
 
-STATIC_ROOT = '/home/deb117379/lsmviewer/public_html/static'
+# STATIC_ROOT = '/home/deb117379/lsmviewer/LSMviewer/static'
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': '/home/deb117379/logs/django.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': '/home/deb117379/logs/lsmviewer.log',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'INFO',
+#             'propagate': True,
+#         },
+#     },
+# }
