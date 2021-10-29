@@ -108,6 +108,7 @@ function calculate_network_impact_score() {
         url: nisCalcUrl,
         success: function (response) {
             var result = JSON.parse(JSON.stringify(response));
+            console.log(result)
 
             if (result.NetworkImpactScore == -100)
                 alert("The infarct file does not have the same number of dimensions with the atlas!");
@@ -117,12 +118,13 @@ function calculate_network_impact_score() {
                 alert("The infarct file does not have the same voxels dimension with the atlas!");
             else if (result.NetworkImpactScore == -400)
                 alert("The infarct file is not binary!");
-            else if (result.NetworkImpactScore == 0){
-                    document.getfElementById("results").innerHTML = "The Network Impact Score cannot be calculated!"
-                    + "<br/> "
-                    + "<br/> "
-                    + " The infarct does not overlap with any of the regions, "
-                    + "meaning that the patient has an isolated white matter or infratentorial infarct.";
+            else if (result.NetworkImpactScore == -600){
+                document.getElementById("results").innerHTML = "The Network Impact Score cannot be calculated!"
+                + "<br/> "
+                + "<br/> "
+                + "The infarct does not overlap with any of the regions, "
+                + "meaning that the patient has an isolated white matter or infratentorial infarct."
+                ;
             }
             else if (result.NetworkImpactScore == -500)
                 alert("Please upload a file to proceed.");
