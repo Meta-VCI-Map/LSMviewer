@@ -275,7 +275,7 @@ class RequestResultViewSet(ViewSet):
                 '''check if the network impact score is zero.
                  If yes, the log10 is undefined'''
                 if network_impact_score == 0.0:
-                    return JsonResponse({"NetworkImpactScore": -600}, status=200)
+                    return JsonResponse({"NetworkImpactScore": 0}, status=200)
 
                 '''apply the log10'''
                 log_network_impact_score = log10( network_impact_score )
