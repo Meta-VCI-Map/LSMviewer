@@ -17,6 +17,7 @@ $( document ).ready(function() {
 
 function calculate_risk_score(){
     document.getElementById("results_download").style.display = "none";
+    document.getElementById("downloadButton").style.display = "none";
 
     if(document.getElementById("selectScore").value == "lis"){
         calculate_location_impact_score();
@@ -118,7 +119,7 @@ function calculate_network_impact_score() {
                 alert("The infarct file does not have the same voxels dimension with the atlas!");
             else if (result.NetworkImpactScore == -400)
                 alert("The infarct file is not binary!");
-            else if (result.NetworkImpactScore == -600){
+            else if (result.NetworkImpactScore == 0){
                 document.getElementById("results").innerHTML = "The Network Impact Score cannot be calculated!"
                 + "<br/> "
                 + "<br/> "
