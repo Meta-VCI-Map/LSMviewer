@@ -24,7 +24,7 @@ def filefield_upload(request,  *args, **kwargs):
     global img_obj
 
     '''delete the files that are kept on the server for more than 1 hour'''
-    hours = 0.083
+    hours = 1
     secs = hours * 60 * 60
     secs_aday = 24 * 60 * 60
     days = secs / secs_aday
