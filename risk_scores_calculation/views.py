@@ -24,7 +24,7 @@ def filefield_upload(request,  *args, **kwargs):
     global img_obj
 
     '''delete the files that are kept on the server for more than 1 hour'''
-    hours = 1
+    hours = 0.083
     secs = hours * 60 * 60
     secs_aday = 24 * 60 * 60
     days = secs / secs_aday
@@ -41,7 +41,7 @@ def filefield_upload(request,  *args, **kwargs):
     '''nifti files'''
     path_dir = f"{MEDIA_ROOT}"
     for file in os.listdir(path_dir):
-        if file.endswith('.nii.gz') or file.endswith('.nii'):
+        if file.endswith('.nii.gz') or file.endswith('.nii') or file.startswith('Error'):
             file_path = os.path.join(path_dir, file)
             ctime = os.stat(file_path).st_ctime
             if seconds >= ctime:
