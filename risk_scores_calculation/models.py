@@ -5,6 +5,7 @@ from pathlib import Path
 import os
 import time
 import gzip
+from LSMviewer.settings import MEDIA_ROOT
 
 # Create your models here.
 def rename(instance, filename):
@@ -17,6 +18,9 @@ def rename(instance, filename):
         instance = gzip.decompress(instance.image.read())
     elif filename.endswith('.nii'):
         file = Path(filename).stem
+    else:
+        filename = "Error"
+        return os.path.join(filename)
 
     '''rename by timestamp'''
     timestamp = str(time.time())

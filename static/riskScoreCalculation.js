@@ -8,9 +8,14 @@ var successUpload = document.getElementById("uploaded").value;
 $( document ).ready(function() {
     document.getElementById("fileUpload").style.visibility = "visible";
     console.log( filename);
-    if (filename != null){
-        document.getElementById("uploaded").innerHTML = "Successfully uploaded:  "
+    if (filename != null)  {
+        if (filename.includes("Error")) {
+            document.getElementById("uploaded").innerHTML = "Please select a NIFTI file"
+        }
+        else{
+            document.getElementById("uploaded").innerHTML = "Successfully uploaded:  "
                                                         + filename;
+        }
     }
 
 });
