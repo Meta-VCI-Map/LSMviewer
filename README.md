@@ -57,7 +57,7 @@ device if desired.
 
 
 
-## Contribute
+## Credits
 
 LSMviewer is developed by Maria Leousi, on behaf of the *Meta VCI Map* consortium,
 University Medical Center Utrecht, The Netherlands.
