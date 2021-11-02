@@ -10,6 +10,30 @@ Detailed descriptions of the risk scores used:
 
 Information can also be found on the ***Meta VCI Map*** website: https://metavcimap.org/
 
+## Build on your local server
+
+1. Download the main branch, create and activate the environment using conda:
+ ```
+conda env create -f environment.yml
+conda activate env
+```
+
+2. In the directory of `manage.py`, create an `.env` file containing the _SECRET_KEY_ in the following form 
+> SECRET_KEY = ' ... '
+
+Then double-check that this file is referred to in the `.gitignore`.
+
+3. To launch the server, you can run 
+```
+python manage.py runserver
+```
+
+The local server is working at http://127.0.0.1:8000/risk-scores/, as indicated by the
+> LSMviewer/urls.py
+
+
+
+
 ## Usage
 
 ### Standalone tool version
@@ -47,6 +71,7 @@ Note that the **Network Impact Score** may be undefined in cases where the uploa
 ### Online tool version
 
 Find the online version of the application on the ***Meta VCI Map*** website following this URL: https://metavcimap.org/lsmviewer
+
 
 #### Getting started
 
