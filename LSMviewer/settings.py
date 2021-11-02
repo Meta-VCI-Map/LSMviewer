@@ -27,7 +27,6 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    # 'http://metavcimap.org/'
 ]
 
 
@@ -71,7 +70,6 @@ INTERNAL_IPS = [
     # ...
     '127.0.0.1',
     # ...
-    # 'http://metavcimap.org/lsmviewer',
 ]
 
 ROOT_URLCONF = 'LSMviewer.urls'
@@ -159,24 +157,3 @@ STATICFILES_FINDERS = (
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,"media/")
-
-# STATIC_ROOT = '/home/deb117379/lsmviewer/LSMviewer/static'
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'file': {
-#             'level': 'INFO',
-#             'class': 'logging.FileHandler',
-#             'filename': '/home/deb117379/logs/lsmviewer.log',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['file'],
-#             'level': 'INFO',
-#             'propagate': True,
-#         },
-#     },
-# }
