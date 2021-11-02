@@ -12,13 +12,35 @@ Information can also be found on the ***Meta VCI Map*** website: https://metavci
 
 ## Usage
 
-### Standalone tool version
+### Build your own executable
 
-Download the desktop application from the ***Meta VCI Map*** website, following this URL: https://metavcimap.org/lsmviewer
+The original code of the standalone version is in `LSMviewer.py`. Download the current branch on your device. You will then need to convert the `LSMviewer.py` to an executable by using a simple graphical interface.
+To do this, install the auto-py-to-exe package in your environment:
+
+``` 
+pip install auto-py-to-exe
+```
+
+and open the graphical interface 
+``` 
+auto-py-to-exe.exe
+```
+Browse to the `LSMviewer.py` file, select the One File and Windows Based choices and proceed to the conversion: 
+
+![printscreen1](https://user-images.githubusercontent.com/23291570/139864771-07d7ed53-8c78-4b7c-850f-fe4125a5b4b8.png)
 
 
-#### Prerequisites
-Move the `LSMviewer.exe`  file into the `Source code` folder.
+Once completed, the executable file `LSMviewer.exe` can be found in the newly created `output` folder.
+
+![printscreen2](https://user-images.githubusercontent.com/23291570/139866215-e27e9fa5-8115-462b-9658-50967e860f8b.png)
+
+
+
+### Use the latest release of the executable
+
+Download the `LSMviewer.exe` and source code from the Releases: https://github.com/Meta-VCI-Map/LSMviewer/releases
+
+Move the `LSMviewer.exe` file into the `Source code` folder.
 
 Make sure to add the path of the executable file LSMviewer.exe to the exclusions of your antivirus. See more details below:
 
@@ -29,7 +51,7 @@ Make sure to add the path of the executable file LSMviewer.exe to the exclusions
 	* for Norton https://support.norton.com/sp/en/us/home/current/solutions/v3672136
   
   
-#### Getting started
+## Getting started
 
 To launch the application, run the executable file `LSMviewer.exe`.
 
@@ -41,20 +63,6 @@ Apart from this file, they will also be displayed inside a frame on the applicat
 
 Some details on the results will appear in a frame at the bottom of the application window.
 Note that the **Network Impact Score** may be undefined in cases where the uploaded file contains an isolated white matter infarct or an infratentorial incident.
-
-
-
-### Online tool version
-
-Find the online version of the application on the ***Meta VCI Map*** website following this URL: https://metavcimap.org/lsmviewer
-
-#### Getting started
-
-The user can upload a binary mask of a brain infarct of size `(182, 218, 182)`, visualize it on a 3D online viewer and select a risk score for calculation. 
-
-The results will be displayed on the screen. An excel file with the detailed results on the **Network Impact Score** can be downloaded on the user's 
-device if desired.
-
 
 
 ## Credits
