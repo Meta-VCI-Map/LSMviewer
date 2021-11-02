@@ -36,7 +36,7 @@ Once completed, the executable file `LSMviewer.exe` can be found in the newly cr
 
 
 
-### Use the latest release of the executable
+### Use the latest available release
 
 Download the `LSMviewer.exe` and source code from the Releases: https://github.com/Meta-VCI-Map/LSMviewer/releases
 
