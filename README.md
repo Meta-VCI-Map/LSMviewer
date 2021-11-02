@@ -15,17 +15,18 @@ Information can also be found on the ***Meta VCI Map*** website: https://metavci
 ### Build your own executable
 
 The original code of the standalone version is in `LSMviewer.py`. Download the current branch on your device. You will then need to convert the `LSMviewer.py` to an executable by using a simple graphical interface.
-To do this, install the auto-py-to-exe package in your environment:
-
-``` 
-pip install auto-py-to-exe
+To do this, you will need to create and activate an environment based on the .yml file:
 ```
+conda env create -f environment.yml
+conda activate env
+```
+This new environment named _env_ collects all the required packages. 
 
-and open the graphical interface 
+Moving on to the creation of the executable, you will have to open the graphical interface: 
 ``` 
 auto-py-to-exe.exe
 ```
-Browse to the `LSMviewer.py` file, select the One File and Windows Based choices and proceed to the conversion: 
+browse to the `LSMviewer.py` file, select the One File and Windows Based choices and proceed to the conversion: 
 
 ![printscreen1](https://user-images.githubusercontent.com/23291570/139864771-07d7ed53-8c78-4b7c-850f-fe4125a5b4b8.png)
 
