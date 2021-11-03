@@ -187,8 +187,10 @@ td.papaya-dialog-content-control {
 	  color: gray;
 	}
 */
-/*
-#ChangeRange-1Min2 {value: 0.75;}*/
+
+/*#ChangeRange-1Min0 {value: 0.75;}
+#DisplayRange-10SliderMin {position: absolute; top: 5px; left: 99px; z-index: 99;}
+*/
 /*input[id="ChangeRange-1Min2"] { value: 0.75; }
 input#ChangeRange-1Min2.papaya-menu-input {
     value: 0.75;
