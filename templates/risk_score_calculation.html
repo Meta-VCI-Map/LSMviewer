@@ -38,26 +38,19 @@
 
 	<br><br>
 	<h3>Image viewer</h3>
-	<p>Make the binary mask more easily recognizable on the viewer, by maximizing the minimum value of the color range from the top right button menu</p>
-	<!-- Manage file upload  -->
 	<div class="papaya" data-params="papayaparams_userUpload" id="fileUpload">
 		<script type="text/javascript">
 			var papayaparams_userUpload = [];
-			papayaparams_userUpload["showOrientation"] = true;
-			papayaparams_userUpload["radiological"] = "Yes";
-			papayaparams_userUpload["showRuler"] = false;
-			papayaparams_userUpload["worldSpace"] = true;
+            papayaparams_userUpload["showOrientation"] = true;
+            papayaparams_userUpload["radiological"] = "Yes";
+            papayaparams_userUpload["showRuler"] = false;
+            papayaparams_userUpload["worldSpace"] = true;
 
-			papayaparams_userUpload["kioskMode"] = false; <!-- don't hide the toolbar -->
-			papayaparams_userUpload["showControlBar"] = false;
-			papayaparams_userUpload["showControls"] = true;
-			papayaparams_userUpload["showImageButtons"] = true;
+            papayaparams_userUpload["kioskMode"] = true; <!-- hide the toolbar -->
+            papayaparams_userUpload["showControls"] = true;
 
-			papayaparams_userUpload["luts"] = [{"name": "Custom", "data": [
-                                                                           [0, 1, 0, 0]
-			                                                              ]
-			                                                            }];
-
+			papayaparams_userUpload["luts"] = [{"name": "Custom", "gradation":false,
+			                                    "data": [[0, 1, 0, 0], [1, 1, 0, 0]]}];
 
 			papayaparams_userUpload["images"] = [
 									"\\static/MNI152_T1_1mm_brain_uint8.nii",
