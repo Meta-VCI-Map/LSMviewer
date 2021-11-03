@@ -15,14 +15,14 @@ Information can also be found on the ***Meta VCI Map*** website: https://metavci
 ### Create your own executable
 
 The original code of the standalone version is in `LSMviewer.py`. Download the current branch on your device. You will then need to convert the `LSMviewer.py` to an executable by using a simple graphical interface.
-To do this, you will need to create and activate an environment based on the .yml file:
+1. To do this, you will need to create and activate an environment based on the .yml file:
 ```
 conda env create -f environment.yml
 conda activate env
 ```
 This new environment named _env_ collects all the required packages. 
 
-Moving on to the creation of the executable, you will have to open the graphical interface: 
+2. Moving on to the creation of the executable, you will have to open the graphical interface: 
 ``` 
 auto-py-to-exe.exe
 ```
@@ -31,7 +31,7 @@ browse to the `LSMviewer.py` file, select the One File and Windows Based choices
 ![printscreen1](https://user-images.githubusercontent.com/23291570/139864771-07d7ed53-8c78-4b7c-850f-fe4125a5b4b8.png)
 
 
-Once completed, the executable file `LSMviewer.exe` can be found in the newly created `output` folder.
+3. Once completed, the executable file `LSMviewer.exe` can be found in the newly created `output` folder.
 
 ![printscreen2](https://user-images.githubusercontent.com/23291570/139866215-e27e9fa5-8115-462b-9658-50967e860f8b.png)
 
@@ -39,11 +39,11 @@ Once completed, the executable file `LSMviewer.exe` can be found in the newly cr
 
 ### Use the latest available release
 
-Download the `LSMviewer.exe` and source code from the Releases: https://github.com/Meta-VCI-Map/LSMviewer/releases
+1. Download the `LSMviewer.exe` and source code from the Releases: https://github.com/Meta-VCI-Map/LSMviewer/releases
 
-Move the `LSMviewer.exe` file into the `Source code` folder.
+2. Move the `LSMviewer.exe` file into the `Source code` folder.
 
-Make sure to add the path of the executable file LSMviewer.exe to the exclusions of your antivirus. See more details below:
+3. Make sure to add the path of the executable file LSMviewer.exe to the exclusions of your antivirus. See more details below:
 
 	* for Avast https://support.avast.com/en-ww/article/Antivirus-scan-exclusions
 
