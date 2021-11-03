@@ -33,44 +33,9 @@ The local server is working at http://127.0.0.1:8000/risk-scores/, as indicated 
 
 
 
-
 ## Usage
 
-### Standalone tool version
-
-Download the desktop application from the ***Meta VCI Map*** website, following this URL: https://metavcimap.org/lsmviewer
-
-
-#### Prerequisites
-Move the `LSMviewer.exe`  file into the `Source code` folder.
-
-Make sure to add the path of the executable file LSMviewer.exe to the exclusions of your antivirus. See more details below:
-
-	* for Avast https://support.avast.com/en-ww/article/Antivirus-scan-exclusions
-
-	* for Marlwarebytes https://support.malwarebytes.com/hc/en-us/articles/360039024133-Exclude-detections-in-Malwarebytes-for-Windows-v3
-
-	* for Norton https://support.norton.com/sp/en/us/home/current/solutions/v3672136
-  
-  
-#### Getting started
-
-To launch the application, run the executable file `LSMviewer.exe`.
-
-One or multiple multiple binary masks of brain infarcts can be selected. However, note that the files should be of size `(182, 218, 182)` 
-and that the user should not upload more than ~300 files at once, otherwise the application will crash.
-
-The user will be asked to select a directory where the results will be saved in the format of an Excel file. 
-Apart from this file, they will also be displayed inside a frame on the application window.
-
-Some details on the results will appear in a frame at the bottom of the application window.
-Note that the **Network Impact Score** may be undefined in cases where the uploaded file contains an isolated white matter infarct or an infratentorial incident.
-
-
-
-### Online tool version
-
-Find the online version of the application on the ***Meta VCI Map*** website following this URL: https://metavcimap.org/lsmviewer
+Find the application at http://127.0.0.1:8000/risk-scores/
 
 
 #### Getting started
