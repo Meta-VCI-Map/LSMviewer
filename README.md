@@ -12,7 +12,7 @@ Information can also be found on the ***Meta VCI Map*** website: https://metavci
 
 ## Usage
 
-### Build your own executable
+### Create your own executable
 
 The original code of the standalone version is in `LSMviewer.py`. Download the current branch on your device. You will then need to convert the `LSMviewer.py` to an executable by using a simple graphical interface.
 To do this, you will need to create and activate an environment based on the .yml file:
