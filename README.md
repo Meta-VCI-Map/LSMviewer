@@ -12,30 +12,36 @@ Information can also be found on the ***Meta VCI Map*** website: https://metavci
 
 ## Build on your local server
 
-1. Download the main branch, create and activate the environment using conda:
+Developing the application locally means hosting it on the user's device. The local server should work at this URL: http://127.0.0.1:8000. 
+To do this, please follow the instructions below:
+
+1. Download or clone the main branch on your device, create and activate the virtual environment using conda on command prompt:
  ```
+git clone -b main https://github.com/Meta-VCI-Map/LSMviewer
 conda env create -f environment.yml
 conda activate env
 ```
 
-2. In the directory of `manage.py`, create an `.env` file containing the _SECRET_KEY_ in the following form 
+2. Move into the directory of `manage.py` and create an `.env` file containing the _SECRET_KEY_ in the following form 
 > SECRET_KEY = ' ... '
 
-Then double-check that this file is referred to in the `.gitignore`.
+Then double-check that the name of this file is referred to in the `.gitignore`.
 
 3. To launch the server, you can run 
 ```
 python manage.py runserver
 ```
 
-The local server is working at http://127.0.0.1:8000/risk-scores/, as indicated by the
+The local server is working at http://127.0.0.1:8000, as indicated by the
 > LSMviewer/urls.py
+
+If you want to change this URL, edit the urlpatterns in the above file.
 
 
 
 ## Usage
 
-Find the application at http://127.0.0.1:8000/risk-scores/
+As mentioned above, the web application an be found at http://127.0.0.1:8000
 
 
 #### Getting started
@@ -49,5 +55,5 @@ device if desired.
 
 ## Credits
 
-LSMviewer is developed by Maria Leousi, on behaf of the *Meta VCI Map* consortium,
+LSMviewer is developed by Maria Leousi, on behaf of the ***Meta VCI Map*** consortium,
 University Medical Center Utrecht, The Netherlands.
