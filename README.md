@@ -41,7 +41,7 @@ If you want to change this URL, edit the urlpatterns in the above file.
 
 ## Usage
 
-As mentioned above, the web application an be found at http://127.0.0.1:8000
+As mentioned above, the web application can be found at http://127.0.0.1:8000
 
 
 #### Getting started
