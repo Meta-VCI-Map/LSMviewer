@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from risk_scores_calculation.views import filefield_upload, RequestResultViewSet
 
 urlpatterns = [
-    path('risk-scores/', filefield_upload, name="upload"),
+    path('', filefield_upload, name="upload"),
 
     # API endpoint
     path('calculate-location-risk-score', RequestResultViewSet.calculate_location_score, name="lis_calculation"),
