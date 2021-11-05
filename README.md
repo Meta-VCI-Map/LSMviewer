@@ -14,30 +14,35 @@ Information can also be found on the ***Meta VCI Map*** website: https://metavci
 
 ### Create your own executable
 
-The original code of the standalone version is in `LSMviewer.py`. Download the current branch on your device. You will then need to convert the `LSMviewer.py` to an executable by using a simple graphical interface.
-1. To do this, you will need to create and activate an environment based on the .yml file:
+The original code of the executable file can be found in `LSMviewer.py` while the executable file itself can be downloaded from the Releases (https://github.com/Meta-VCI-Map/LSMviewer/releases).
+If a custom version of the executable is derired, teh user will need to convert the `LSMviewer.py` script to an executable by using a simple graphical interface.
+To do this, please follow the instructions below:
+
+1. Download or clone the releases branch on your device, create and activate the virtual environment using conda on command prompt:
 ```
+git clone -b releases https://github.com/Meta-VCI-Map/LSMviewer
 conda env create -f environment.yml
 conda activate env
-```
-This new environment named _env_ collects all the required packages. 
+``` 
 
-2. Moving on to the creation of the executable, you will have to open the graphical interface: 
+2. Moving on to the creation of the executable, you will have to open the graphical interface 
 ``` 
 auto-py-to-exe.exe
 ```
-browse to the `LSMviewer.py` file, select the One File and Windows Based choices and proceed to the conversion: 
+browse to the `LSMviewer.py` file, select the 'One File' and 'Windows Based' choices and proceed to the conversion as shown below:
 
 ![printscreen1](https://user-images.githubusercontent.com/23291570/139864771-07d7ed53-8c78-4b7c-850f-fe4125a5b4b8.png)
 
 
-3. Once completed, the executable file `LSMviewer.exe` can be found in the newly created `output` folder.
+3. Once completed, the executable file `LSMviewer.exe` can be found in the newly created `output` folder:
 
 ![printscreen2](https://user-images.githubusercontent.com/23291570/139866215-e27e9fa5-8115-462b-9658-50967e860f8b.png)
 
 
 
 ### Use the latest available release
+
+You can also use the latest available release containing the executable by following the steps below:
 
 1. Download the `LSMviewer.exe` and source code from the Releases: https://github.com/Meta-VCI-Map/LSMviewer/releases
 
@@ -68,5 +73,5 @@ Note that the **Network Impact Score** may be undefined in cases where the uploa
 
 ## Credits
 
-LSMviewer is developed by Maria Leousi, on behaf of the *Meta VCI Map* consortium,
+LSMviewer is developed by Maria Leousi, on behaf of the ***Meta VCI Map*** consortium,
 University Medical Center Utrecht, The Netherlands.
