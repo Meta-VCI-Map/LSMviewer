@@ -15,7 +15,8 @@ Information can also be found on the ***Meta VCI Map*** website: https://metavci
 ### Create your own executable
 
 The original code of the executable file can be found in `LSMviewer.py` while the executable file itself can be downloaded from the Releases (https://github.com/Meta-VCI-Map/LSMviewer/releases).
-If a custom version of the executable is derired, teh user will need to convert the `LSMviewer.py` script to an executable by using a simple graphical interface.
+
+If a custom version of the executable is derired, the user will need to convert the `LSMviewer.py` script to an executable by using a simple graphical interface.
 To do this, please follow the instructions below:
 
 1. Download or clone the releases branch on your device, create and activate the virtual environment using conda on command prompt:
