@@ -16,6 +16,8 @@ import numpy as np
 import nibabel as nib
 from openpyxl import Workbook
 import xlsxwriter
+from globals import *
+from scores import *
 
 
 # class for scrollable label
@@ -162,14 +164,12 @@ class Ui_MainWindow(object):
         
         
         
-    def select_files(self):
-
-        global getFilenamesList, images_array_data, lis, nis        
+    def select_files(self):       
         self.results.setText("")
         self.table.setText("")
         
-        lis = self.checkbox_lis.isChecked()
-        nis = self.checkbox_nis.isChecked()       
+        globals.lis = self.checkbox_lis.isChecked()
+        globals.nis = self.checkbox_nis.isChecked()       
         
         
         """select infarct files"""
@@ -187,50 +187,49 @@ class Ui_MainWindow(object):
             self.label_filename.setText(filesStr)
                        
             getFilenames = self.label_filename.text()
-            getFilenamesList = list(getFilenames.split("\n"))        
-            getFilenamesList.remove("")       
+            globals.getFilenamesList = list(getFilenames.split("\n"))        
+            globals.getFilenamesList.remove("")       
             self.label_filename.setText(names)
             
             self.progress.show()
             self.handle_progress(i=0, size=0)
             
             '''load image data'''
-            images_array_data = []
-            listSize = len(getFilenamesList)
+            globals.images_array_data = []
+            listSize = len(globals.getFilenamesList)
             i = 0
             checked_names = []
             names = ""
             while i < listSize:
-                uploaded_file = nib.load(getFilenamesList[i])
+                uploaded_file = nib.load(globals.getFilenamesList[i])
                 uploaded_data = uploaded_file.get_fdata()
                 
-                head, currentFile = ntpath.split(getFilenamesList[i])
+                head, currentFile = ntpath.split(globals.getFilenamesList[i])
                 
                 if ~((uploaded_data==0) | (uploaded_data==1)).all() :
-                    self.warning_message(0, nis, lis, fileName=files[i], binary=False)
-                    getFilenamesList.remove(getFilenamesList[i])
+                    self.warning_message(0, globals.nis, globals.lis, fileName=files[i], binary=False)
+                    globals.getFilenamesList.remove(globals.getFilenamesList[i])
                     files.remove(files[i])
-                    listSize = len(getFilenamesList)
+                    listSize = len(globals.getFilenamesList)
 
                 else:
-                    images_array_data.append(uploaded_data)
+                    globals.images_array_data.append(uploaded_data)
                     checked_names.append(currentFile)
                     names += "\n" + currentFile
                     i+=1
                     
             self.label_filename.setText(names)
             
-            print(len(images_array_data))            
+            print(len(globals.images_array_data))            
             
             '''no files selected'''
-            if len(getFilenamesList)==0:
-                self.warning_message(0, nis, lis)
+            if len(globals.getFilenamesList)==0:
+                self.warning_message(0, globals.nis, globals.lis)
 
         
     
         
-    def calculate_scores(self):   
-        global lis, nis, nis_workbook, results_workbook, results_excel, worksheet_results, getFilenamesList
+    def calculate_scores(self):
         self.results.setText("")
         self.table.setText("")
         
@@ -238,32 +237,31 @@ class Ui_MainWindow(object):
         
         '''check if files are selected'''
         try:
-            getFilenamesList
+            globals.getFilenamesList
         except:
             '''no files selected'''
             self.warning_message(0, nis=0, lis=0)
         else:            
             '''calculate scores'''       
-            lis = self.checkbox_lis.isChecked()
-            nis = self.checkbox_nis.isChecked() 
-            array = getFilenamesList   
+            globals.lis = self.checkbox_lis.isChecked()
+            globals.nis = self.checkbox_nis.isChecked() 
+            array = globals.getFilenamesList
                     
-            print(lis, nis)
-            if nis == False and lis == False:
-                self.warning_message(len(array), nis, lis)
+            print(globals.lis, globals.nis)
+            if globals.nis == False and globals.lis == False:
+                self.warning_message(len(array), globals.nis, globals.lis)
             else:
                 dir_path = QtWidgets.QFileDialog.getExistingDirectory(caption="Choose directory to save results", directory=os.getcwd())
                 
                 '''create an excel file for the detailed network impact score results'''
-                if nis == True:
+                if globals.nis == True:
                     excel_filename = os.path.join(dir_path, 'Network_score_details.xlsx')
-                    nis_workbook = xlsxwriter.Workbook(excel_filename, {'tmpdir': os.path.join(os.getcwd(), os.pardir)})
+                    globals.nis_workbook = xlsxwriter.Workbook(excel_filename, {'tmpdir': os.path.join(os.getcwd(), os.pardir)})
                 
                 '''create an excel file for the results'''
-                results_excel = os.path.join(dir_path, 'Results.xlsx')
-                results_workbook = Workbook()
-                results_page = results_workbook.active
-                
+                globals.results_excel = os.path.join(dir_path, 'Results.xlsx')
+                globals.results_workbook = Workbook()
+                results_page = globals.results_workbook.active
                 
                 images=[]
                 location_scores=[]
@@ -275,33 +273,30 @@ class Ui_MainWindow(object):
                 self.progress.show()
                 
                 '''save scores from multiple files and show results if only one file is uploaded'''
-                for i in range(0, size): 
-                    
+                for i in range(0, size):                    
                     self.handle_progress(i, size)
                     
                     head, name = ntpath.split(array[i])
                     print("FILES", name)
-                    images.append(name)
-                    #self.results.setText(image)
+                    images.append(name)                    
                     
-                    
-                    if lis == True and nis == False:
-                        location_riskScore = self.location_score(images_array_data[i], images[i])
+                    if globals.lis == True and globals.nis == False:
+                        location_riskScore = location_score(globals.images_array_data[i], images[i])
                         location_scores.append(location_riskScore)
                         
-                        isFinished = self.write_to_results(results_page, lis, nis, images, location_impact_score=location_scores)
+                        isFinished = self.write_to_results(results_page, globals.lis, globals.nis, images, location_impact_score=location_scores)
                         if location_riskScore == None:
                             isFinished = False
                             show_result = ""
                         else:
                             show_result = images[0] + "\t"+"\t" + "The location score is: " + str(location_scores[0])
                         
-                    elif lis == False and nis == True:
-                        network_riskScore, maxRegionName = self.network_score(images_array_data[i], images[i])
+                    elif globals.lis == False and globals.nis == True:
+                        network_riskScore, maxRegionName = network_score(globals.images_array_data[i], images[i], globals.nis_workbook)
                         network_scores.append(network_riskScore)
                         region_names.append(maxRegionName)
                         
-                        isFinished = self.write_to_results(results_page, lis, nis, images, network_impact_score=network_scores)
+                        isFinished = self.write_to_results(results_page, globals.lis, globals.nis, images, network_impact_score=network_scores)
                         if network_riskScore == None:
                             isFinished = False
                             show_result = ""
@@ -309,14 +304,14 @@ class Ui_MainWindow(object):
                             show_result = images[0] + "\t"+"\t" + "The network score is: "+ str(network_scores[0]) \
                                                 + " (" + str(region_names[0]) + ")."
                     
-                    elif lis == True and nis == True:
-                        location_riskScore = self.location_score(images_array_data[i], images[i])
+                    elif globals.lis == True and globals.nis == True:
+                        location_riskScore = location_score(globals.images_array_data[i], images[i])
                         location_scores.append(location_riskScore)
-                        network_riskScore, maxRegionName = self.network_score(images_array_data[i], images[i])
+                        network_riskScore, maxRegionName = network_score(globals.images_array_data[i], images[i], globals.nis_workbook)
                         network_scores.append(network_riskScore)
                         region_names.append(maxRegionName)
                         
-                        isFinished = self.write_to_results(results_page, lis, nis, images, location_impact_score=location_scores, network_impact_score=network_scores)
+                        isFinished = self.write_to_results(results_page, globals.lis, globals.nis, images, location_impact_score=location_scores, network_impact_score=network_scores)
                         if location_riskScore == None or network_riskScore == None:
                             isFinished = False
                             show_result = ""
@@ -333,21 +328,21 @@ class Ui_MainWindow(object):
                     self.results.setText(show_result)
                 except:
                     '''no files selected'''
-                    self.warning_message(size, nis, lis, excel_filename=0)            
+                    self.warning_message(size, globals.nis, globals.lis, excel_filename=0)            
                 else:
                     '''show results from multiple files at once'''
                     if size > 1:
                         show_result = ""
-                        if lis == True and nis == False:
+                        if globals.lis == True and globals.nis == False:
                             for j in range(0, size):            
                                 show_result = show_result + "\n" + images[j] + "\t"+"\t" + "The location score is: " + str(location_scores[j])
                                 
-                        elif lis == False and nis == True:
+                        elif globals.lis == False and globals.nis == True:
                             for j in range(0, size):            
                                 show_result = show_result + "\n" + images[j] + "\t"+"\t" + "The network score is: " + str(network_scores[j]) \
                                                         + " (" + str(region_names[j]) + ")."
                         
-                        elif lis == True and nis == True:
+                        elif globals.lis == True and globals.nis == True:
                             for j in range(0, size):            
                                 show_result = show_result + "\n" + images[j] + "\t"+"\t" + "The location score is: " + str(location_scores[j]) \
                                                                             + "\t"+"\t" + "The network score is: " + str(network_scores[j]) \
@@ -372,140 +367,23 @@ class Ui_MainWindow(object):
                                            )
                     
                     '''close the excel file'''
-                    if nis == True:
-                        nis_workbook.close()
-                    results_workbook.save(filename=results_excel)
+                    if globals.nis == True:
+                        globals.nis_workbook.close()
+                    globals.results_workbook.save(filename=globals.results_excel)
                     
                     '''show relevant messages'''
                     if isFinished == True:
-                       self.warning_message(size, nis, lis, excel_filename=results_excel, end=True)
+                       self.warning_message(size, globals.nis, globals.lis, excel_filename=globals.results_excel, end=True)
                        
-                    if nis == True and isFinished == True:
-                        self.warning_message(size, nis, lis, excel_filename)
+                    if globals.nis == True and isFinished == True:
+                        self.warning_message(size, globals.nis, globals.lis, excel_filename)
     
-                    elif lis == False and nis == False:
-                        self.warning_message(size, nis, lis)
-                    
-                
-
-
-            
-    def location_score(self, infarct_data, filename):
-        global getFilenamesList, nis, lis, results_workbook, worksheet_results
-        
-        loc_img = os.path.join(os.getcwd(),'location_impact_score_atlas.nii.gz')
-        loc_coefficient_image = nib.load(loc_img)
-        loc_coefficient_data = loc_coefficient_image.get_fdata()
-        loc_img_shape = loc_coefficient_data.shape 
-        inf_img_shape = infarct_data.shape
-        
-        if loc_img_shape != inf_img_shape:            
-            self.warning_message(len(getFilenamesList), nis, lis, shape=False, fileName=filename)
-            return None
-        else:        
-            location_impact_score = labeled_comprehension(
-                                                input = loc_coefficient_data,
-                                                labels = infarct_data,
-                                                index = None,
-                                                func = np.mean, out_dtype = float, default = 0.)          
-            return "%.4f" % location_impact_score        
-          
-            
-    def network_score(self, infarct_data, filename):
-        global getFilenamesList, nis, lis
-        
-        regionNum = 90
-                    
-        '''Fisrt, read the xlsx files'''
-        hub = load_workbook(os.path.join(os.getcwd(),'hubscore.xlsx'))
-        AALvolumes = load_workbook(os.path.join(os.getcwd(),'newAALvolumes.xlsx'))
-        sheet_hub = hub.active
-        sheet_volumes = AALvolumes.active
-
-        '''get the length of the file'''
-        row_count = sheet_hub.max_row
-        column_count = sheet_hub.max_column
-
-        '''save volume names and hubscores to lists'''
-        volume_name_list = []
-        hubscore_list = []
-        AALvolumes_list = []
-        for i in range(1, row_count + 1):
-            for j in range(1, column_count + 1):
-                if i == 1 and j <= regionNum:
-                    volume_name_list.append(sheet_hub.cell(row=i, column=j).value)
-                elif i == 2 and j <= regionNum:
-                    hubscore_list.append(sheet_hub.cell(row=i, column=j).value)
-                    AALvolumes_list.append(sheet_volumes.cell(row=i, column=j).value)
-        
-        net_img = os.path.join(os.getcwd(),'network_impact_score_combined_atlas.nii.gz')
-        net_coefficient_image = nib.load(net_img)
-        net_coefficient_data = net_coefficient_image.get_fdata()
-        
-        labels = np.unique(net_coefficient_data)
-        '''drop the label of the background'''
-        labels = labels[labels != 0]
-        impact_score = []
-        
-        net_img_shape = net_coefficient_data.shape
-        inf_img_shape = infarct_data.shape
-        
-        if net_img_shape != inf_img_shape:
-            self.warning_message(len(getFilenamesList), nis, lis, shape=False, fileName=filename)
-            return None, None
-        else:
-            score_infarct = labeled_comprehension(
-                                                input = infarct_data,
-                                                labels = net_coefficient_data,
-                                                index = labels,
-                                                func = np.sum, out_dtype = float, default = 0.)
-            score_infarct_volume = score_infarct / 1000.
-            
-            each_volume = 1
-            while each_volume < regionNum + 1 :
-                region_volume = AALvolumes_list[ each_volume - 1 ]
-                infarct_fraction = score_infarct_volume[ each_volume - 1 ] / region_volume
-                '''clip fraction to [anything, 1.]'''
-                infarct_fraction = np.clip(infarct_fraction, None, 1.)
-                risk_score = infarct_fraction * hubscore_list[ each_volume - 1 ]
-                impact_score.append(risk_score)
-                each_volume += 1
-            network_impact_score = max(impact_score)
-            
-            '''check if the max impact score is zero.
-             If yes, the log10 is undefined'''
-            if network_impact_score == 0.0:
-                undefined_score = "Undefined"
-                undefined_name = "Undefined"
-                return undefined_score, undefined_name
-    
-            '''apply the log10'''
-            log_network_impact_score = np.log10( network_impact_score )
-            print("score: ",network_impact_score,"log: ", log_network_impact_score)
-            
-            nonzero_regions = np.nonzero(impact_score)
-            nonzero_regions_list = list(nonzero_regions[0])
-            corrected_list = nonzero_regions_list
-    
-            '''save the IDs of the regions that have an impact score other than zero
-                and make a file'''
-            i = 0
-            while i < len(corrected_list):
-                corrected_list[i] = corrected_list[i] +1
-                i += 1
-    
-            '''find the region (ID and name) of the maximum impact score'''
-            max_index = list(impact_score).index(network_impact_score) + 1
-            max_index_region_name = volume_name_list[max_index - 1]
-    
-            self.write_nis_to_file(nis_workbook, filename, corrected_list, volume_name_list, impact_score, 
-                               network_impact_score, max_index_region_name, log_network_impact_score)
-    
-            return "%.4f" % log_network_impact_score, max_index_region_name
+                    elif globals.lis == False and globals.nis == False:
+                        self.warning_message(size, globals.nis, globals.lis)
+                                 
     
     
-    
-    def write_nis_to_file(self, workbook, filename, corrected_list, volume_name_list, impact_score,
+    def write_nis_to_file(workbook, filename, corrected_list, volume_name_list, impact_score,
                       network_impact_score, max_index_region_name, log_network_impact_score):
         
         '''write data to .xlsx'''
@@ -528,19 +406,19 @@ class Ui_MainWindow(object):
     
     def write_to_results(self, file, lis, nis, fileNames, location_impact_score=[], network_impact_score=[]):
         maxRow = 1
-        if lis==True and nis==False:
+        if globals.lis==True and globals.nis==False:
             file.cell(row=1, column=2, value="Location Impact Score")            
             for i in range(0, len(fileNames)):    
                 file.cell(row=maxRow+i+1, column=1, value=fileNames[i])
                 file.cell(row=maxRow+i+1, column=2, value=location_impact_score[i])
                 
-        elif lis==False and nis==True:
+        elif globals.lis==False and globals.nis==True:
             file.cell(row=1, column=2, value="Network Impact Score")            
             for i in range(0, len(fileNames)):
                 file.cell(row=maxRow+i+1, column=1, value=fileNames[i])
                 file.cell(row=maxRow+i+1, column=2, value=network_impact_score[i])
                 
-        elif lis==True and nis==True:
+        elif globals.lis==True and globals.nis==True:
             file.cell(row=1, column=2, value="Location Impact Score")
             file.cell(row=1, column=3, value="Network Impact Score")             
             for i in range(0, len(fileNames)):    
@@ -566,7 +444,7 @@ class Ui_MainWindow(object):
         
         msg = QMessageBox()
         
-        if end == True and excel_filename == results_excel:
+        if end == True and excel_filename == globals.results_excel:
             msg.setIcon(QMessageBox.Information)
             msg.setWindowTitle("Results")
             msg.setText("The results are saved in: " + os.path.realpath(excel_filename))
@@ -581,12 +459,12 @@ class Ui_MainWindow(object):
             msg.setWindowTitle("Warning")
             msg.setText("Please select your infarct files to proceed")
         
-        elif nis == False and lis == False:
+        elif globals.nis == False and globals.lis == False:
             msg.setIcon(QMessageBox.Warning)
             msg.setWindowTitle("Warning")
             msg.setText("Please select a score to proceed")        
         
-        elif nis == True and excel_filename != 0:
+        elif globals.nis == True and excel_filename != 0:
             msg.setIcon(QMessageBox.Information)
             msg.setWindowTitle("Network Impact Score")
             msg.setText("The detailed results on the network impact score are saved in: " + os.path.realpath(excel_filename))
@@ -600,11 +478,12 @@ class Ui_MainWindow(object):
         
 
 
-
-
 if __name__ == "__main__":
     import sys
-
+    
+    import globals
+    globals.initialize()
+    
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle('Fusion')
     MainWindow = QtWidgets.QMainWindow()
