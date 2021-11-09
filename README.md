@@ -38,6 +38,24 @@ The local server is working at http://127.0.0.1:8000, as indicated by the
 If you want to change this URL, edit the urlpatterns in the above file.
 
 
+### Adding a new score
+Adding new scores on the tool, requires some modifications in javascript/html and in python.
+
+#### risk_scores_calculation/views.py
+Handles the calculations in python. For the new score, create a function inside the `RequestResultViewSet class` that will handle the request for computing the score and will return the result in a json format.
+
+#### risk_scores_calculation/urls.py
+Creates request URLs for the API endpoints. Add the path to which the request for the score calculation mentioned above will be found.
+
+#### templates/risk_score_calculation.html
+Handles what is shown on the screeen. For the new score, you can add an option to the form with id="selection_form".
+  
+#### static/riskScoreCalculation.js
+Handles the flow of the operations in html. Add a funtion for the new score that will take as input the file which is uploaded by the user and that creates a POST ajax request looking at the API endpoint's URL previously inserted in the `urls.py`. This way, the new score will be linked to the correct function for calculation in the `views.py`
+
+
+
+
 
 ## Usage
 
