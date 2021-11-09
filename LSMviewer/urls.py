@@ -21,10 +21,8 @@ from risk_scores_calculation.views import filefield_upload, RequestResultViewSet
 urlpatterns = [
     path('', filefield_upload, name="upload"),
 
-    # API endpoint
-    path('calculate-location-risk-score', RequestResultViewSet.calculate_location_score, name="lis_calculation"),
-    path('calculate-network-risk-score', RequestResultViewSet.calculate_network_score, name="nis_calculation"),
-    path('download-network-risk-score', RequestResultViewSet.download_network_score, name="download_file"),
+    # API endpoints
+    path('', include('risk_scores_calculation.urls')),
 
 ]
 
