@@ -41,11 +41,18 @@ browse to the `LSMviewer.py` file, select the 'One File' and 'Windows Based' cho
 
 
 ### Adding a new score
-Adding new scores on the tool, requires modifications on the `LSviewer.py` file. Inside the `Ui_MainWindow class`: 
+Adding new scores on the tool, requires modifications on the `LSviewer.py`, `scores.py` and `globals.py` files. Specifically, `LSviewer.py` handles the user interface, `scores.py` handles the computations and `globals.py` initializes the global variables. 
 
-1. Modify the `setupUi function` so that it includes a checkbox for the new score.
-2. Define a function for the new score that takes as inputs the data uploaded by the user and its filename.
-3. Modify the `calculate_scores function` to incorporate for the new score, i.e. if the checkbox for the score is clicked, call the already defined function.
+To include a new score, you need to:
+
+1. Add a global variable for the score in `globals.py` that will indicate if the user has clicked on the checkbox for this specific score.
+2. Modify the `scores.py` by including a function for calculating the new score.
+3. Modify the `LSviewer.py`:
+	- Include a checkbox for the new score in the `setupUi function`.
+	- Initialize the checkbox's value in the `select_files function` .
+	- Edit the `calculate_scores function` so that it calls the corresponding function from `scores.py` when the respective checkbox is selected.
+4. Don't forget to update the `write_to_results function` so that the excel file will incorporate the results for the newly introduced score.
+5. Also, update the `warning_message function` accordingly.
 
 
 
