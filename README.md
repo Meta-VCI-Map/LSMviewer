@@ -40,6 +40,14 @@ browse to the `LSMviewer.py` file, select the 'One File' and 'Windows Based' cho
 ![printscreen2](https://user-images.githubusercontent.com/23291570/139866215-e27e9fa5-8115-462b-9658-50967e860f8b.png)
 
 
+### Adding a new score
+Adding new scores on the tool, requires modifications on the `LSviewer.py` file. Inside the `Ui_MainWindow class`: 
+
+1. Modify the `setupUi function` so that it includes a checkbox for the new score.
+2. Define a function for the new score that takes as inputs the data uploaded by the user and its filename.
+3. Modify the `calculate_scores function` to incorporate for the new score, i.e. if the checkbox for the score is clicked, call the already defined function.
+
+
 
 ### Use the latest available release
 
