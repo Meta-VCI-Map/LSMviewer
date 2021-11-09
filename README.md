@@ -53,7 +53,7 @@ You can also use the latest available release containing the executable by follo
 
 	* for Avast https://support.avast.com/en-ww/article/Antivirus-scan-exclusions
 
-	* for Marlwarebytes https://support.malwarebytes.com/hc/en-us/articles/360039024133-Exclude-detections-in-Malwarebytes-for-Windows-v3
+	* for Malwarebytes https://support.malwarebytes.com/hc/en-us/articles/360039024133-Exclude-detections-in-Malwarebytes-for-Windows-v3
 
 	* for Norton https://support.norton.com/sp/en/us/home/current/solutions/v3672136
   
