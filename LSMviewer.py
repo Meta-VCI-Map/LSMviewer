@@ -14,8 +14,7 @@ import ntpath
 import os
 import numpy as np
 import nibabel as nib
-from scipy.ndimage import labeled_comprehension
-from openpyxl import Workbook, load_workbook
+from openpyxl import Workbook
 import xlsxwriter
 
 
