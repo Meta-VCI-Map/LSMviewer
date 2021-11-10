@@ -41,7 +41,7 @@ browse to the `LSMviewer.py` file, select the 'One File' and 'Windows Based' cho
 
 
 ### Adding a new score
-Adding new scores on the tool, requires modifications on the `LSviewer.py`, `scores.py` and `globals.py` files. Specifically, `LSviewer.py` handles the user interface, `scores.py` handles the computations and `globals.py` initializes the global variables. 
+Adding new scores on the tool, requires modifications on the `LSviewer.py`, `scores.py` and `globals.py` files. Specifically, `LSviewer.py` handles mostly the user interface, `scores.py` handles the computations and `globals.py` initializes the global variables. 
 
 To include a new score, you need to:
 
