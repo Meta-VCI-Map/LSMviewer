@@ -51,11 +51,21 @@
 
 			papayaparams_userUpload["luts"] = [{"name": "Custom", "gradation":false,
 			                                    "data": [[0, 1, 0, 0], [1, 1, 0, 0]]}];
-
-			papayaparams_userUpload["images"] = [
+<!--            Development-->
+			try{
+			    papayaparams_userUpload["images"] = [
 									"\\static/MNI152_T1_1mm_brain_uint8.nii",
 									"\\media/{{ filename }}"
 									];
+			}
+<!--			Deployment-->
+			catch{
+			    papayaparams_userUpload["images"] = [
+									"\\static/MNI152_T1_1mm_brain_uint8.nii",
+									"\\static/{{ filename }}"
+									];
+			}
+
 			papayaparams_userUpload["{{ filename }}"]  = {lut: "Custom", min:0, max:1 };
 		</script>
 	</div>

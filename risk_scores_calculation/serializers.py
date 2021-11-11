@@ -1,6 +1,11 @@
 # risk_scores_calculation/serializers.py
 
-from risk_scores_calculation.models import InfarctImage, CoefficientImage, RequestResult
+try:
+    '''Development'''
+    from risk_scores_calculation.models import InfarctImage, CoefficientImage, RequestResult
+except:
+    '''Deployment'''
+    from LSMviewer.risk_scores_calculation.models import InfarctImage, CoefficientImage, RequestResult
 from rest_framework.serializers import ModelSerializer
 
 class InfarctImageSerializer(ModelSerializer):

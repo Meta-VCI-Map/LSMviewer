@@ -2,11 +2,9 @@
 
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
-from LSMviewer.settings import MEDIA_ROOT, BASE_DIR
 from rest_framework.viewsets import ViewSet
 from rest_framework.parsers import JSONParser
 from .forms import FileForm
-from risk_scores_calculation.serializers import CombinedSerializer
 import os
 import time
 from openpyxl import Workbook, load_workbook
@@ -17,6 +15,15 @@ import nibabel as nib
 from scipy.ndimage import labeled_comprehension
 from numpy import sum, mean, array, unique, nonzero, clip, log10
 import shutil
+
+try:
+    '''Development'''
+    from LSMviewer.settings import BASE_DIR, MEDIA_ROOT
+    from risk_scores_calculation.serializers import CombinedSerializer
+except:
+    '''Deployment'''
+    from LSMviewer.LSMviewer.deployment_settings import BASE_DIR, STATIC_ROOT, MEDIA
+    from LSMviewer.risk_scores_calculation.serializers import CombinedSerializer
 
 # Create your views here.
 def filefield_upload(request,  *args, **kwargs):
@@ -30,22 +37,34 @@ def filefield_upload(request,  *args, **kwargs):
     days = secs / secs_aday
     seconds = time.time() - (days * secs_aday)
 
+    try:
+        '''Deployment'''
+        path_dir = STATIC_ROOT
+    except:
+        '''Development'''
+        path_dir = os.getcwd()
     '''excel files'''
-    path_dir = os.getcwd()
     for file in os.listdir(path_dir):
         if file.endswith('.xlsx'):
             file_path = os.path.join(path_dir, file)
             ctime = os.stat(file_path).st_ctime
             if seconds >= ctime:
                 delete_file_from_server(file_path)
+
+    try:
+        '''Deployment'''
+        path_dir = STATIC_ROOT
+    except:
+        '''Development'''
+        path_dir = f"{MEDIA_ROOT}"
     '''nifti files'''
-    path_dir = f"{MEDIA_ROOT}"
     for file in os.listdir(path_dir):
-        if file.endswith('.nii.gz') or file.endswith('.nii') or file.startswith('Error'):
-            file_path = os.path.join(path_dir, file)
-            ctime = os.stat(file_path).st_ctime
-            if seconds >= ctime:
-                delete_file_from_server(file_path)
+        if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file):
+            if file.endswith('.nii.gz') or file.endswith('.nii') or file.startswith('Error'):
+                file_path = os.path.join(path_dir, file)
+                ctime = os.stat(file_path).st_ctime
+                if seconds >= ctime:
+                    delete_file_from_server(file_path)
 
     '''save file uploaded by user'''
     if request.method == 'POST':
@@ -54,6 +73,13 @@ def filefield_upload(request,  *args, **kwargs):
             form.save()
             img_obj = form.instance
             img_obj.save()
+            try:
+                '''Deployment'''
+                source = os.path.join(img_obj.image.name)
+                destination = os.path.join(STATIC_ROOT, img_obj.image.name)
+                shutil.copy(source, destination)
+            except:
+                pass
             return render(request, 'risk_score_calculation.html', {'form': form, 'img_obj': img_obj, 'filename': img_obj.image.name})
     else:
         form = FileForm()
@@ -71,7 +97,14 @@ class RequestResultViewSet(ViewSet):
     def calculate_location_score(request):
         '''Location Impact Score'''
 
-        static_dir = os.path.join(BASE_DIR, "static/")
+        try:
+            '''Development'''
+            media_dir = MEDIA_ROOT
+            atlas_dir = os.path.join(BASE_DIR, "static/")
+        except:
+            '''Deployment'''
+            media_dir = os.getcwd()
+            atlas_dir = STATIC_ROOT
 
         if request.is_ajax and request.method == "POST":
             print("Request:", request)
@@ -80,14 +113,14 @@ class RequestResultViewSet(ViewSet):
             request_data = JSONParser().parse(request)
             infarct_obj = CombinedSerializer(request_data).data['infarct_image']
             session_name = img_obj.image.name
-            for file in os.listdir(f"{MEDIA_ROOT}"):
+            for file in os.listdir(f"{media_dir}"):
                 if file == infarct_obj['filename']:
                     session_name = file
             print("session/file: ", session_name)
 
             try:
                 '''load file data'''
-                uncompressed_filepath = f"{MEDIA_ROOT}/{session_name}"
+                uncompressed_filepath = f"{media_dir}/{session_name}"
                 filepath = uncompressed_filepath + '.gz'
                 shutil.copy(uncompressed_filepath, filepath)
                 try:
@@ -111,7 +144,7 @@ class RequestResultViewSet(ViewSet):
             infarct_zVoxel = infarct_shape[7]
 
             '''load atlas data'''
-            coeff_file = f"{static_dir}/{'location_impact_score_atlas.nii.gz'}"
+            coeff_file = f"{atlas_dir}/{'location_impact_score_atlas.nii.gz'}"
             coeff_data = (nib.load(coeff_file)).get_fdata()
             coeff_info = (nib.load(coeff_file)).header
             coeff_shape = coeff_info['dim']
@@ -154,11 +187,17 @@ class RequestResultViewSet(ViewSet):
     def calculate_network_score(request):
         '''Network Impact Score'''
 
-        static_dir = os.path.join(BASE_DIR, "static/")
-
+        try:
+            '''Development'''
+            media_dir = MEDIA_ROOT
+            atlas_dir = os.path.join(BASE_DIR, "static/")
+        except:
+            '''Deployment'''
+            media_dir = os.getcwd()
+            atlas_dir = STATIC_ROOT
         '''read the .xlsx files for the region volumes and the hub scores'''
-        hub = load_workbook(f"{static_dir}/{'hubscore.xlsx'}")
-        AALvolumes = load_workbook(f"{static_dir}/{'newAALvolumes.xlsx'}")
+        hub = load_workbook(f"{atlas_dir}/{'hubscore.xlsx'}")
+        AALvolumes = load_workbook(f"{atlas_dir}/{'newAALvolumes.xlsx'}")
         sheet_hub = hub.active
         sheet_volumes = AALvolumes.active
 
@@ -185,14 +224,14 @@ class RequestResultViewSet(ViewSet):
             request_data = JSONParser().parse(request)
             infarct_obj = CombinedSerializer(request_data).data['infarct_image']
             session_name = img_obj.image.name
-            for file in os.listdir(f"{MEDIA_ROOT}"):
+            for file in os.listdir(f"{media_dir}"):
                 if file == infarct_obj['filename']:
                     session_name = file
             print("session/file: ", session_name)
 
             try:
                 '''load file data'''
-                uncompressed_filepath = f"{MEDIA_ROOT}/{session_name}"  # img_obj.image.name}"
+                uncompressed_filepath = f"{media_dir}/{session_name}"
                 filepath = uncompressed_filepath + '.gz'
                 shutil.copy(uncompressed_filepath, filepath)
                 try:
@@ -216,7 +255,7 @@ class RequestResultViewSet(ViewSet):
             infarct_zVoxel = infarct_shape[7]
 
             '''load atlas data'''
-            region_file = f"{static_dir}/{'network_impact_score_combined_atlas.nii.gz'}"
+            region_file = f"{atlas_dir}/{'network_impact_score_combined_atlas.nii.gz'}"
             region_data = (nib.load(region_file)).get_fdata()
             region_info = (nib.load(region_file)).header
             region_shape = region_info['dim']

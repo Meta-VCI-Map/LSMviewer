@@ -11,6 +11,11 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LSMviewer.settings')
+try:
+    '''Development'''
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LSMviewer.settings')
+except:
+    '''Deployment'''
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LSMviewer.LSMviewer.settings')
 
 application = get_wsgi_application()

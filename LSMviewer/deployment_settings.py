@@ -24,11 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
+  'metavcimap.org',
+  'www.metavcimap.org',
 ]
-
 
 # Application definition
 
@@ -42,7 +43,7 @@ INSTALLED_APPS = [
 
     #my own apps
     'rest_framework',
-    'risk_scores_calculation',
+    'LSMviewer.risk_scores_calculation',
 
 
 ]
@@ -56,6 +57,7 @@ REST_FRAMEWORK = {
     ]
 }
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -66,13 +68,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-INTERNAL_IPS = [
+#INTERNAL_IPS = [
     # ...
-    '127.0.0.1',
+    #'127.0.0.1',
     # ...
-]
+#]
 
-ROOT_URLCONF = 'LSMviewer.urls'
+ROOT_URLCONF = 'LSMviewer.LSMviewer.urls'
 
 TEMPLATES = [
     {
@@ -90,7 +92,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'LSMviewer.wsgi.application'
+WSGI_APPLICATION = 'LSMviewer.LSMviewer.wsgi.application'
 
 
 # Database
@@ -137,8 +139,18 @@ USE_L10N = True
 USE_TZ = True
 
 
-# DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 #None #5242880
+# DATA_UPLOAD_MAX_MEMORY_SIZE = #None #5242880
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
+
+# HTTPS SETTINGS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -153,7 +165,27 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-
+STATIC_ROOT = '/home/deb117379/domains/metavcimap.org/public_html/static'
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR,"media/")
+#MEDIA_ROOT = os.path.join(BASE_DIR,"media/")
+MEDIA = os.path.join(BASE_DIR, "media/")
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/home/deb117379/logs/lsmviewer.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
