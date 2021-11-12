@@ -1,5 +1,9 @@
 from django.apps import AppConfig
-from LSMviewer.settings import DEBUG
+
+try:
+    from LSMviewer.deployment_settings import DEBUG
+except:
+    from LSMviewer.settings import DEBUG
 
 if DEBUG == True:
     '''Development'''
