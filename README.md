@@ -37,8 +37,7 @@ Then double-check that the name of this file is referred to in the `.gitignore`.
 python manage.py runserver
 ```
 
-The local server is working at http://127.0.0.1:8000, as indicated by the
-> LSMviewer/urls.py
+The local server is working at http://127.0.0.1:8000, as indicated by the `LSMviewer/urls.py`
 
 If you want to change this URL, edit the urlpatterns in the above file.
 
