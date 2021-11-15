@@ -77,6 +77,11 @@ The required packages for the environment have been installed by `pip install [p
 5. The web application for the **LSMviewer** (_metavcimap.org/lsmviewer_) is already created on the server. The main branch is also cloned in this directory
 ```
 git clone -b main https://github.com/Meta-VCI-Map/LSMviewer
+git checkout main
+```
+Pull the latest version of the main branch by using:
+```
+git pull origin main
 ```
 6. The code from the GitHub repository can be found in _/home/[user]/lsmviewer/LSMviewer/_ and the logs file in _/home/[user]/logs/lsmviewer.log_. From this point onwards, some adaptations on the files have to be made; a new local branch has been created on the remote server (namelly `new_branch_2`) to avoid pushing changes to the main branch. Please use 
 ```
