@@ -172,7 +172,7 @@ Important notes:
 
 ## Usage
 
-As mentioned above, the web application can be found at http://127.0.0.1:8000
+As mentioned above, the local web application can be found at http://127.0.0.1:8000 and remote web application at the Application URL; on the ***Meta VCI Map*** website following this link: https://metavcimap.org/lsmviewer
 
 
 #### Getting started
