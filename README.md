@@ -72,13 +72,18 @@ More details on how Python applications are created are available at https://www
 ```
 source /home/[user]/virtualenv/lsmviewer/3.7/bin/activate && cd /home/[user]/lsmviewer
 ```
-The required packages for the environment are installed by `pip install [package-name]`.
+The required packages for the environment have been installed by `pip install [package-name]`.
 
-5. The web application for the **LSMviewer** (_metavcimap.org/lsmviewer_) is already created on the server. The deployment branch is also cloned in this directory
+5. The web application for the **LSMviewer** (_metavcimap.org/lsmviewer_) is already created on the server. The main branch is also cloned in this directory
 ```
-git clone -b deployment https://github.com/Meta-VCI-Map/LSMviewer
+git clone -b main https://github.com/Meta-VCI-Map/LSMviewer
 ```
-6. The code from the GitHub repository can be found in _/home/[user]/lsmviewer/LSMviewer/_ and the logs file in _/home/[user]/logs/lsmviewer.log_
+6. The code from the GitHub repository can be found in _/home/[user]/lsmviewer/LSMviewer/_ and the logs file in _/home/[user]/logs/lsmviewer.log_. From this point onwards, some adaptations on the files have to be made; a new local branch has been created on the remote server (namelly `new_branch_2`) to avoid pushing changes to the main branch. Please use 
+```
+git checkout new_branch_2
+
+```
+when modifying the files on the server.
 7. `LSMviewer/common.py` contains the general Django settings. The remote server specific settings can be found in `LSMviewer/production.py`. Make sure that DJANGO_SETTINGS_MODULE looks for this file in order to run the application locally. Check this in `wsgi.py`:
 ```
 DJANGO_SETTINGS_MODULE = 'LSMviewer.LSMviewer.production' 
