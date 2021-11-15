@@ -3,12 +3,7 @@
 
 from django.urls import include, path
 from rest_framework import routers
-try:
-    '''Development'''
-    from risk_scores_calculation.views import RequestResultViewSet
-except:
-    '''Deployment'''
-    from LSMviewer.risk_scores_calculation.views import RequestResultViewSet
+from risk_scores_calculation.views import RequestResultViewSet
 
 router = routers.DefaultRouter()
 #router.register('calculate-risk-score', RequestViewSet, basename='lis'), #.calculate_risk_score()
