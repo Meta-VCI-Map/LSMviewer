@@ -86,7 +86,6 @@ git pull origin main
 6. The code from the GitHub repository can be found in _/home/[user]/lsmviewer/LSMviewer/_ and the logs file in _/home/[user]/logs/lsmviewer.log_. From this point onwards, some adaptations on the files have to be made; a new local branch has been created on the remote server (namelly `new_branch_2`) to avoid pushing changes to the main branch. Please use 
 ```
 git checkout new_branch_2
-
 ```
 when modifying the files on the server.
 7. `LSMviewer/common.py` contains the general Django settings. The remote server specific settings can be found in `LSMviewer/production.py`. Make sure that DJANGO_SETTINGS_MODULE looks for this file in order to run the application locally. Check this in `wsgi.py`:
