@@ -1,29 +1,22 @@
 # risk_scores_calculation/forms.py
 
-from django.shortcuts import render,redirect
+from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.viewsets import ViewSet
 from rest_framework.parsers import JSONParser
+from LSMviewer.common import BASE_DIR, MEDIA_ROOT
+from risk_scores_calculation.serializers import CombinedSerializer
 from .forms import FileForm
 import os
 import time
-from openpyxl import Workbook, load_workbook
+from openpyxl import load_workbook
 from pathlib import Path
 import pandas as pd
 import xlsxwriter
 import nibabel as nib
 from scipy.ndimage import labeled_comprehension
-from numpy import sum, mean, array, unique, nonzero, clip, log10
+from numpy import sum, mean, unique, nonzero, clip, log10
 import shutil
-
-try:
-    '''Development'''
-    from LSMviewer.settings import BASE_DIR, MEDIA_ROOT
-    from risk_scores_calculation.serializers import CombinedSerializer
-except:
-    '''Deployment'''
-    from LSMviewer.LSMviewer.deployment_settings import BASE_DIR, STATIC_ROOT, MEDIA
-    from LSMviewer.risk_scores_calculation.serializers import CombinedSerializer
 
 # Create your views here.
 def filefield_upload(request,  *args, **kwargs):
@@ -37,26 +30,18 @@ def filefield_upload(request,  *args, **kwargs):
     days = secs / secs_aday
     seconds = time.time() - (days * secs_aday)
 
-    try:
-        '''Deployment'''
-        path_dir = STATIC_ROOT
-    except:
-        '''Development'''
-        path_dir = os.getcwd()
+    '''Development'''
+    path_dir = os.getcwd()
     '''excel files'''
     for file in os.listdir(path_dir):
-        if file.endswith('.xlsx'):
+        if file.endswith('.xlsx') or file.endswith('.nii') or file.endswith('.nii.gz') or file.startswith('Error'):
             file_path = os.path.join(path_dir, file)
             ctime = os.stat(file_path).st_ctime
             if seconds >= ctime:
                 delete_file_from_server(file_path)
 
-    try:
-        '''Deployment'''
-        path_dir = STATIC_ROOT
-    except:
-        '''Development'''
-        path_dir = f"{MEDIA_ROOT}"
+    '''Development'''
+    path_dir = f"{MEDIA_ROOT}"
     '''nifti files'''
     for file in os.listdir(path_dir):
         if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file):
@@ -74,7 +59,6 @@ def filefield_upload(request,  *args, **kwargs):
             img_obj = form.instance
             img_obj.save()
             try:
-                '''Deployment'''
                 source = os.path.join(img_obj.image.name)
                 destination = os.path.join(STATIC_ROOT, img_obj.image.name)
                 shutil.copy(source, destination)
@@ -97,14 +81,10 @@ class RequestResultViewSet(ViewSet):
     def calculate_location_score(request):
         '''Location Impact Score'''
 
-        try:
-            '''Development'''
-            media_dir = MEDIA_ROOT
-            atlas_dir = os.path.join(BASE_DIR, "static/")
-        except:
-            '''Deployment'''
-            media_dir = os.getcwd()
-            atlas_dir = STATIC_ROOT
+        '''Development'''
+        media_dir = MEDIA_ROOT
+        atlas_dir = os.path.join(BASE_DIR, "static/")
+
 
         if request.is_ajax and request.method == "POST":
             print("Request:", request)
@@ -187,14 +167,11 @@ class RequestResultViewSet(ViewSet):
     def calculate_network_score(request):
         '''Network Impact Score'''
 
-        try:
-            '''Development'''
-            media_dir = MEDIA_ROOT
-            atlas_dir = os.path.join(BASE_DIR, "static/")
-        except:
-            '''Deployment'''
-            media_dir = os.getcwd()
-            atlas_dir = STATIC_ROOT
+
+        '''Development'''
+        media_dir = MEDIA_ROOT
+        atlas_dir = os.path.join(BASE_DIR, "static/")
+
         '''read the .xlsx files for the region volumes and the hub scores'''
         hub = load_workbook(f"{atlas_dir}/{'hubscore.xlsx'}")
         AALvolumes = load_workbook(f"{atlas_dir}/{'newAALvolumes.xlsx'}")

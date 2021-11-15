@@ -16,27 +16,15 @@ Including another URLconf
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from risk_scores_calculation.views import filefield_upload
 
-try:
-    '''Development'''
-    from risk_scores_calculation.views import filefield_upload
-    urlpatterns = [
-        path('', filefield_upload, name="upload"),
 
-        # API endpoints
-        path('', include('risk_scores_calculation.urls')),
-    ]
+urlpatterns = [
+    path('', filefield_upload, name="upload"),
 
-except:
-    '''Deployment'''
-    from LSMviewer.risk_scores_calculation.views import filefield_upload
-
-    urlpatterns = [
-        path('', filefield_upload, name="upload"),
-
-        # API endpoints
-        path('', include('LSMviewer.risk_scores_calculation.urls')),
-    ]
+    # API endpoints
+    path('', include('risk_scores_calculation.urls')),
+]
 
 
 

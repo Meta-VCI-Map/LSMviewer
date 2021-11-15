@@ -10,11 +10,6 @@ https://docs.djangoproject.com/en/2.1/howto/deployment/wsgi/
 import os
 from django.core.wsgi import get_wsgi_application
 
-try:
-    '''Development'''
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LSMviewer.settings')
-except:
-    '''Deployment'''
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LSMviewer.LSMviewer.deployment_settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LSMviewer.LSMviewer.production')
 
 application = get_wsgi_application()
