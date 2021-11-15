@@ -32,7 +32,6 @@ def filefield_upload(request,  *args, **kwargs):
     days = secs / secs_aday
     seconds = time.time() - (days * secs_aday)
 
-    # When running in production, use the STATIC_ROOT directory instead
     path_dir = os.getcwd()
     for file in os.listdir(path_dir):
         if file.endswith('.xlsx'):
