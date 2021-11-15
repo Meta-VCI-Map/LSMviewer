@@ -21,6 +21,10 @@ git clone -b main https://github.com/Meta-VCI-Map/LSMviewer
 conda env create -f environment.yml
 conda activate env
 ```
+If the repository is already cloned on your device, pull the latest code by using 
+```
+git pull origin main
+```
 
 2. `LSMviewer/common.py` contains the general Django settings. The local server specific settings can be found in `LSMviewer/development.py`. Make sure that DJANGO_SETTINGS_MODULE looks for this file in order to run the application locally. Check this in `manage.py`:
 ```
