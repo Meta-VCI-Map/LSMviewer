@@ -17,6 +17,8 @@ import nibabel as nib
 from scipy.ndimage import labeled_comprehension
 from numpy import sum, mean, unique, nonzero, clip, log10
 import shutil
+# When running in production, import the STATIC_ROOT directory:
+# from LSMviewer.LSMviewer.production import STATIC_ROOT
 
 # Create your views here.
 def filefield_upload(request,  *args, **kwargs):
@@ -41,7 +43,7 @@ def filefield_upload(request,  *args, **kwargs):
     # When running in production, use the STATIC_ROOT directory instead
     path_dir = f"{MEDIA_ROOT}"
     for file in os.listdir(path_dir):
-        if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file):
+        if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file) and ("hubscore" not in file) and ("newAALvolumes" not in file):
             if file.endswith('.nii.gz') or file.endswith('.nii') or file.startswith('Error'):
                 file_path = os.path.join(path_dir, file)
                 ctime = os.stat(file_path).st_ctime
@@ -55,13 +57,12 @@ def filefield_upload(request,  *args, **kwargs):
             form.save()
             img_obj = form.instance
             img_obj.save()
-            try:
-                # When running in production, make a copy into the pubic_html directory
-                source = os.path.join(img_obj.image.name)
-                destination = os.path.join(STATIC_ROOT, img_obj.image.name)
-                shutil.copy(source, destination)
-            except:
-                pass
+
+            # When running in production, make a copy into the pubic_html directory
+            # source = os.path.join(img_obj.image.name)
+            # destination = os.path.join(STATIC_ROOT, img_obj.image.name)
+            # shutil.copy(source, destination)
+
             return render(request, 'risk_score_calculation.html', {'form': form, 'img_obj': img_obj, 'filename': img_obj.image.name})
     else:
         form = FileForm()
@@ -81,8 +82,7 @@ class RequestResultViewSet(ViewSet):
 
         media_dir = MEDIA_ROOT
         atlas_dir = os.path.join(BASE_DIR, "static/")
-        # When running in production, change the directories to:
-        # media_dir = os.getcwd()
+        # When running in production, change the directory to:
         # atlas_dir = STATIC_ROOT
 
         if request.is_ajax and request.method == "POST":
@@ -155,7 +155,7 @@ class RequestResultViewSet(ViewSet):
                                             labels = infarct_data,
                                             index = None,
                                             func = mean, out_dtype = float, default = 0.)
-                print("Risk score =", location_impact_score)
+                print("location impact score =", location_impact_score)
                 return JsonResponse({"LocationImpactScore": "%.4f" % location_impact_score}, status=200)
 
             except:
@@ -168,8 +168,7 @@ class RequestResultViewSet(ViewSet):
 
         media_dir = MEDIA_ROOT
         atlas_dir = os.path.join(BASE_DIR, "static/")
-        # When running in production, change the directories to:
-        # media_dir = os.getcwd()
+        # When running in production, change the directory to:
         # atlas_dir = STATIC_ROOT
 
         '''read the .xlsx files for the region volumes and the hub scores'''
@@ -287,7 +286,6 @@ class RequestResultViewSet(ViewSet):
 
                 '''the network impact score is the maximum among the risk scores'''
                 network_impact_score = max(impact_score)
-                print(network_impact_score)
 
                 '''check if the network impact score is zero.
                  If yes, the log10 is undefined'''
@@ -296,7 +294,7 @@ class RequestResultViewSet(ViewSet):
 
                 '''apply the log10'''
                 log_network_impact_score = log10( network_impact_score )
-                print("score: ",network_impact_score,"log: ", log_network_impact_score)
+                print("network impact score= ", log_network_impact_score)
 
                 nonzero_regions = nonzero(impact_score)
                 nonzero_regions_list = list(nonzero_regions[0])
@@ -313,7 +311,6 @@ class RequestResultViewSet(ViewSet):
                 '''find the region (ID and name) of the maximum impact score'''
                 max_index = list(impact_score).index(network_impact_score) + 1
                 max_index_region_name = volume_name_list[max_index - 1]
-                print(max_index, max_index_region_name)
 
                 '''write data to .xlsx'''
                 if session_name.endswith('.nii.gz'):
@@ -361,7 +358,6 @@ class RequestResultViewSet(ViewSet):
             results = request_data['ExcelFilename']
 
             info_file = pd.read_excel(results)
-            print(info_file)
             df_info_file = info_file.to_json()
 
             return JsonResponse({"InfoFile": df_info_file,
