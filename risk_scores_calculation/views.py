@@ -30,19 +30,16 @@ def filefield_upload(request,  *args, **kwargs):
     days = secs / secs_aday
     seconds = time.time() - (days * secs_aday)
 
-    '''Development'''
+    # When running in production, use the STATIC_ROOT directory instead
     path_dir = os.getcwd()
-    '''excel files'''
     for file in os.listdir(path_dir):
-        if file.endswith('.xlsx') or file.endswith('.nii') or file.endswith('.nii.gz') or file.startswith('Error'):
+        if file.endswith('.xlsx'):
             file_path = os.path.join(path_dir, file)
             ctime = os.stat(file_path).st_ctime
             if seconds >= ctime:
                 delete_file_from_server(file_path)
-
-    '''Development'''
+    # When running in production, use the STATIC_ROOT directory instead
     path_dir = f"{MEDIA_ROOT}"
-    '''nifti files'''
     for file in os.listdir(path_dir):
         if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file):
             if file.endswith('.nii.gz') or file.endswith('.nii') or file.startswith('Error'):
@@ -59,6 +56,7 @@ def filefield_upload(request,  *args, **kwargs):
             img_obj = form.instance
             img_obj.save()
             try:
+                # When running in production, make a copy into the pubic_html directory
                 source = os.path.join(img_obj.image.name)
                 destination = os.path.join(STATIC_ROOT, img_obj.image.name)
                 shutil.copy(source, destination)
@@ -81,10 +79,11 @@ class RequestResultViewSet(ViewSet):
     def calculate_location_score(request):
         '''Location Impact Score'''
 
-        '''Development'''
         media_dir = MEDIA_ROOT
         atlas_dir = os.path.join(BASE_DIR, "static/")
-
+        # When running in production, change the directories to:
+        # media_dir = os.getcwd()
+        # atlas_dir = STATIC_ROOT
 
         if request.is_ajax and request.method == "POST":
             print("Request:", request)
@@ -167,10 +166,11 @@ class RequestResultViewSet(ViewSet):
     def calculate_network_score(request):
         '''Network Impact Score'''
 
-
-        '''Development'''
         media_dir = MEDIA_ROOT
         atlas_dir = os.path.join(BASE_DIR, "static/")
+        # When running in production, change the directories to:
+        # media_dir = os.getcwd()
+        # atlas_dir = STATIC_ROOT
 
         '''read the .xlsx files for the region volumes and the hub scores'''
         hub = load_workbook(f"{atlas_dir}/{'hubscore.xlsx'}")

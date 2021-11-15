@@ -24,6 +24,9 @@ urlpatterns = [
 
     # API endpoints
     path('', include('risk_scores_calculation.urls')),
+
+# When running in production, edit the path as following:
+# path('', include('LSMviewer.risk_scores_calculation.urls')),
 ]
 
 
