@@ -39,15 +39,25 @@ def filefield_upload(request,  *args, **kwargs):
             ctime = os.stat(file_path).st_ctime
             if seconds >= ctime:
                 delete_file_from_server(file_path)
-    # When running in production, use the STATIC_ROOT directory instead
     path_dir = f"{MEDIA_ROOT}"
     for file in os.listdir(path_dir):
-        if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file) and ("hubscore" not in file) and ("newAALvolumes" not in file):
+        if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and (
+                "network_impact_score_combined_atlas" not in file) and ("hubscore" not in file) and (
+                "newAALvolumes" not in file):
             if file.endswith('.nii.gz') or file.endswith('.nii') or file.startswith('Error'):
                 file_path = os.path.join(path_dir, file)
                 ctime = os.stat(file_path).st_ctime
                 if seconds >= ctime:
                     delete_file_from_server(file_path)
+    # When running in production, use the STATIC_ROOT directory as well
+    # path_dir = STATIC_ROOT
+    # for file in os.listdir(path_dir):
+    #     if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file) and ("hubscore" not in file) and ("newAALvolumes" not in file):
+    #         if file.endswith('.nii.gz') or file.endswith('.nii') or file.startswith('Error'):
+    #             file_path = os.path.join(path_dir, file)
+    #             ctime = os.stat(file_path).st_ctime
+    #             if seconds >= ctime:
+    #                 delete_file_from_server(file_path)
 
     '''save file uploaded by user'''
     if request.method == 'POST':
