@@ -46,21 +46,6 @@ The local server is working at http://127.0.0.1:8000, as indicated by the `LSMvi
 If you want to change this URL, edit the urlpatterns in the above file.
 
 
-### Adding a new score
-Adding new scores on the tool, requires some modifications in javascript/html and in python.
-
-#### risk_scores_calculation/views.py
-Handles the calculations in python. For the new score, create a function inside the `RequestResultViewSet class` that will handle the request for computing the score and will return the result in a json format.
-
-#### risk_scores_calculation/urls.py
-Creates request URLs for the API endpoints. Add the path to which the request for the score calculation mentioned above will be found.
-
-#### templates/risk_score_calculation.html
-Handles what is shown on the screeen. For the new score, you can add an option to the form with id="selection_form".
-  
-#### static/riskScoreCalculation.js
-Handles the flow of the operations in html. Add a funtion for the new score that will take as input the file which is uploaded by the user and that creates a POST ajax request looking at the API endpoint's URL previously inserted in the `urls.py`. This way, the new score will be linked to the correct function for calculation in the `views.py`
-
 ## Build on remote server (using Antagonist.nl hosting)
 
 To deploy the application on the remote server, please follow the instructions below:
@@ -158,27 +143,28 @@ papayaparams_userUpload["images"] = [
 11. The _public_html_ folder contains a folder with the same name as the application (here _lsmviewer_), where a `.htaccess` file is placed. This ensures that the server can find the application. In the same directory, folders with the names of the requests used from the application are placed containing `.htaccess` files as well.
 12. Make sure to restart the application from https://metavcimap.org:2223/user/plugins/python_selector#/applications/lsmviewer if changes are applied on the files.
 
+  
 
-### Adding a new score
+## Adding a new score
 Adding new scores on the tool, requires some modifications in javascript/html and in python.
 
-#### lsmviewer/LSMviewer/risk_scores_calculation/views.py
+### risk_scores_calculation/views.py
 Handles the calculations in python. For the new score, create a function inside the `RequestResultViewSet class` that will handle the request for computing the score and will return the result in a json format.
 
-#### lsmviewer/LSMviewer/risk_scores_calculation/urls.py
+### risk_scores_calculation/urls.py
 Creates request URLs for the API endpoints. Add the path to which the request for the score calculation mentioned above will be found.
 
-#### lsmviewer/LSMviewer/templates/risk_score_calculation.html
+### templates/risk_score_calculation.html
 Handles what is shown on the screeen. For the new score, you can add an option to the form with id="selection_form".
   
-#### public_html/static/riskScoreCalculation.js
-Handles the flow of the operations in html. Add a funtion for the new score that will take as input the file which is uploaded by the user and that creates a POST ajax request looking at the API endpoint's URL previously inserted in the `urls.py`. This way, the new score will be linked to the correct function for calculation in the `views.py`
+### static/riskScoreCalculation.js
+Handles the flow of the operations in html. Add a funtion for the new score that will take as input the file which is uploaded by the user and that creates a POST ajax request looking at the API endpoint's URL previously inserted in the `urls.py`. This way, the new score will be linked to the correct function for calculation in the `views.py`.
 
-#### public_html/lsmviewer
+### public_html/lsmviewer
 As mentioned before, this folder ensures that the server can find the application. When adding new scores to the tool, new request URLs for the API endpoints need to be added as well, as described above. These URLs will be visible by the application only if you create subfolders in _lsmviewer_ with the names of the requests and if you place a `.htaccess` file within.
 
 Important notes: 
-1. If you want to modify javascript or css files make sure to do that in the `public_html/static/` folder. The changes will not be visible if applied in `LSMviewer/static/`
+1. If you want to modify javascript or css files on the remote server make sure to do that in the `public_html/static/` folder. The changes will not be visible if applied in `LSMviewer/static/`. For example, instead of modifying the `static/riskScoreCalculation.js`, make changes in the `public_html/static/riskScoreCalculation.js`.
 2. Don't forget to restart the application if changes are applied.
 
 
