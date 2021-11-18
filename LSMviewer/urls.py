@@ -16,22 +16,18 @@ Including another URLconf
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-#from risk_scores_calculation.views import filefield_upload
 from importlib import import_module
 from .common import LSMviewerCommonSettings, riskScoreAppViews, riskScoreAppUrls
 
 settings = import_module(LSMviewerCommonSettings)
 app_views = import_module(riskScoreAppViews)
-app_urls = import_module(riskScoreAppViews)
 
 urlpatterns = [
     path('', app_views.filefield_upload, name="upload"),
 
     # API endpoints
-    path('', include(riskScoreAppUrls)), #'risk_scores_calculation.urls'
+    path('', include(riskScoreAppUrls)),
 
-# When running in production, edit the path as following:
-# path('', include('LSMviewer.risk_scores_calculation.urls')),
 ]
 
 

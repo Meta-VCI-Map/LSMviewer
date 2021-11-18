@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.viewsets import ViewSet
 from rest_framework.parsers import JSONParser
-from LSMviewer.common import BASE_DIR, MEDIA_ROOT, LSMviewerProdSettings
+
 from .serializers import CombinedSerializer
 from .forms import FileForm
 import os
@@ -17,11 +17,16 @@ import nibabel as nib
 from scipy.ndimage import labeled_comprehension
 from numpy import sum, mean, unique, nonzero, clip, log10
 import shutil
-# When running in production, import the STATIC_ROOT directory:
-## from LSMviewer.LSMviewer.production import STATIC_ROOT
-# from importlib import import_module
-# production_settings = import_module(LSMviewerProdSettings)
-# STATIC_ROOT = production_settings.STATIC_ROOT
+
+prod = False
+
+if prod:
+    from LSMviewer.LSMviewer.common import BASE_DIR, MEDIA_ROOT, LSMviewerProdSettings
+    from importlib import import_module
+    production_settings = import_module(LSMviewerProdSettings)
+    STATIC_ROOT = production_settings.STATIC_ROOT
+else:
+    from LSMviewer.common import BASE_DIR, MEDIA_ROOT
 
 
 # Create your views here.
@@ -54,14 +59,15 @@ def filefield_upload(request,  *args, **kwargs):
                 if seconds >= ctime:
                     delete_file_from_server(file_path)
     # When running in production, use the STATIC_ROOT directory as well
-    # path_dir = STATIC_ROOT
-    # for file in os.listdir(path_dir):
-    #     if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file) and ("hubscore" not in file) and ("newAALvolumes" not in file):
-    #         if file.endswith('.nii.gz') or file.endswith('.nii') or file.startswith('Error'):
-    #             file_path = os.path.join(path_dir, file)
-    #             ctime = os.stat(file_path).st_ctime
-    #             if seconds >= ctime:
-    #                 delete_file_from_server(file_path)
+    if prod:
+        path_dir = STATIC_ROOT
+        for file in os.listdir(path_dir):
+            if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file) and ("hubscore" not in file) and ("newAALvolumes" not in file):
+                if file.endswith('.nii.gz') or file.endswith('.nii') or file.startswith('Error'):
+                    file_path = os.path.join(path_dir, file)
+                    ctime = os.stat(file_path).st_ctime
+                    if seconds >= ctime:
+                        delete_file_from_server(file_path)
 
     '''save file uploaded by user'''
     if request.method == 'POST':
@@ -72,9 +78,10 @@ def filefield_upload(request,  *args, **kwargs):
             img_obj.save()
 
             # When running in production, make a copy into the pubic_html directory
-            # source = os.path.join(img_obj.image.name)
-            # destination = os.path.join(STATIC_ROOT, img_obj.image.name)
-            # shutil.copy(source, destination)
+            if prod:
+                source = os.path.join(img_obj.image.name)
+                destination = os.path.join(STATIC_ROOT, img_obj.image.name)
+                shutil.copy(source, destination)
 
             return render(request, 'risk_score_calculation.html', {'form': form, 'img_obj': img_obj, 'filename': img_obj.image.name})
     else:
