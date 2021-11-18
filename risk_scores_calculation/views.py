@@ -18,9 +18,9 @@ from scipy.ndimage import labeled_comprehension
 from numpy import sum, mean, unique, nonzero, clip, log10
 import shutil
 
-prod = False
+prod_mode = False
 
-if prod:
+if prod_mode:
     from LSMviewer.LSMviewer.common import BASE_DIR, MEDIA_ROOT, LSMviewerProdSettings
     from importlib import import_module
     production_settings = import_module(LSMviewerProdSettings)
@@ -59,7 +59,7 @@ def filefield_upload(request,  *args, **kwargs):
                 if seconds >= ctime:
                     delete_file_from_server(file_path)
     # When running in production, use the STATIC_ROOT directory as well
-    if prod:
+    if prod_mode:
         path_dir = STATIC_ROOT
         for file in os.listdir(path_dir):
             if ("MNI152_T1_1mm_brain_uint8" not in file) and ("location_impact_score_atlas" not in file) and ("network_impact_score_combined_atlas" not in file) and ("hubscore" not in file) and ("newAALvolumes" not in file):
@@ -78,7 +78,7 @@ def filefield_upload(request,  *args, **kwargs):
             img_obj.save()
 
             # When running in production, make a copy into the pubic_html directory
-            if prod:
+            if prod_mode:
                 source = os.path.join(img_obj.image.name)
                 destination = os.path.join(STATIC_ROOT, img_obj.image.name)
                 shutil.copy(source, destination)

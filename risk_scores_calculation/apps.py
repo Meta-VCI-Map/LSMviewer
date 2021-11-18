@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
-prod = False
-if prod:
+prod_mode = False
+if prod_mode:
     from LSMviewer.LSMviewer.common import *
 else:
     from LSMviewer.common import *
