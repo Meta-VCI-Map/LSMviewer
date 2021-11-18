@@ -4,7 +4,6 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.viewsets import ViewSet
 from rest_framework.parsers import JSONParser
-
 from .serializers import CombinedSerializer
 from .forms import FileForm
 import os
