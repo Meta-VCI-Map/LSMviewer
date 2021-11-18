@@ -6,6 +6,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.parsers import JSONParser
 from .serializers import CombinedSerializer
 from .forms import FileForm
+from .apps import prod_mode
 import os
 import time
 from openpyxl import load_workbook
@@ -17,7 +18,6 @@ from scipy.ndimage import labeled_comprehension
 from numpy import sum, mean, unique, nonzero, clip, log10
 import shutil
 
-prod_mode = False
 
 if prod_mode:
     from LSMviewer.LSMviewer.common import BASE_DIR, MEDIA_ROOT, LSMviewerProdSettings
