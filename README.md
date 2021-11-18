@@ -97,11 +97,6 @@ BASE_PATH = 'LSMviewer.'
 prod_mode = True
 ```
 
-#### lsmviewer/LSMviewer/risk_score_calculation/views.py
-```
-prod_mode = True
-```
-
 #### lsmviewer/LSMviewer/templates/risk_score_calculation.html
 ```
 papayaparams_userUpload["images"] = [
