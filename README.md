@@ -86,58 +86,28 @@ DJANGO_SETTINGS_MODULE = 'LSMviewer.LSMviewer.production'
 
 Then double-check that the name of this file is referred to in the `.gitignore`.
 
-9. Note that on the remote server, you are one directory deeper than on local server. The application should run from /home/[user]/lsmviewer/ but using the Git repository this path is extended by a directory: /home/[user]/lsmviewer/LSMviewer/. So, you will have to change some imports:
-#### lsmviewer/LSMviewer/LSMviewer/production.py
+9. Note that on the remote server, you are one directory deeper than on local server. The application should run from /home/[user]/lsmviewer/ but using the Git repository this path is extended by a directory: /home/[user]/lsmviewer/LSMviewer/. So, you will have to modify some parts of the code:
+#### lsmviewer/LSMviewer/LSMviewer/common.py
 ```
-...
-from LSMviewer.LSMviewer.common import *
-...
+BASE_PATH = 'LSMviewer.'
+```
 
-```
-#### lsmviewer/LSMviewer/LSMviewer/urls.py
-```
-...
-from LSMviewer.risk_scores_calculation.views
-...
-path('', include('LSMviewer.risk_scores_calculation.urls')),
-...
-```
 #### lsmviewer/LSMviewer/risk_score_calculation/apps.py
-```...
-from LSMviewer.LSMviewer.common
-...
-name = 'LSMviewer.risk_scores_calculation'
-...
 ```
-#### lsmviewer/LSMviewer/risk_score_calculation/serializers.py
+prod_mode = True
 ```
-...
-from LSMviewer.risk_scores_calculation.models 
-...
-```
-#### lsmviewer/LSMviewer/risk_score_calculation/urls.py
-```
-...
-from LSMviewer.risk_scores_calculation.views
-...
-```
+
 #### lsmviewer/LSMviewer/risk_score_calculation/views.py
 ```
-...
-from LSMviewer.LSMviewer.common 
-from LSMviewer.risk_scores_calculation.serializers
-from LSMviewer.LSMviewer.production import STATIC_ROOT
-...
+prod_mode = True
 ```
-For both the `calculate_location_score` and the `calculate_network_score functions` you should change the value of the variable `atlas_dir` from the static folder to STATIC_ROOT. In addition to that, you should make a copy of the images uploaded by the user into the pubic_html directory.
+
 #### lsmviewer/LSMviewer/templates/risk_score_calculation.html
 ```
-...
 papayaparams_userUpload["images"] = [
  "\\static/MNI152_T1_1mm_brain_uint8.nii",
  "\\static/{{ filename }}"
 ];
-...
 ```
 10. The remote server is working at the Application URL defined in Python Selector, here at https://metavcimap.org/lsmviewer
 11. The _public_html_ folder contains a folder with the same name as the application (here _lsmviewer_), where a `.htaccess` file is placed. This ensures that the server can find the application. In the same directory, folders with the names of the requests used from the application are placed containing `.htaccess` files as well.
