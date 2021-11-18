@@ -138,4 +138,21 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,"media/")
 
 PATH = 'LSMviewer'
+# When in production, use BASE_PATH = 'LSMviewer.'
 BASE_PATH = ''
+
+LSMviewerDevSettings = PATH + '.development'
+LSMviewerProdSettings = PATH + '.LSMviewer.production'
+
+if len(BASE_PATH)!=0:
+    LSMviewerCommonSettings = PATH + '.' + BASE_PATH + 'common'
+    riskScoreApp = BASE_PATH + 'risk_scores_calculation'
+    riskScoreAppViews = BASE_PATH + 'risk_scores_calculation.views'
+    riskScoreAppUrls = BASE_PATH + 'risk_scores_calculation.urls'
+    riskScoreAppSerial = BASE_PATH + 'risk_scores_calculation.serializers'
+else:
+    LSMviewerCommonSettings = PATH + '.common'
+    riskScoreApp = 'risk_scores_calculation'
+    riskScoreAppViews = 'risk_scores_calculation.views'
+    riskScoreAppUrls = 'risk_scores_calculation.urls'
+    riskScoreAppSerial = 'risk_scores_calculation.serializers'

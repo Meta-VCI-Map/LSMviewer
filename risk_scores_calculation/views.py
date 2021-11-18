@@ -4,8 +4,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.viewsets import ViewSet
 from rest_framework.parsers import JSONParser
-from LSMviewer.common import BASE_DIR, MEDIA_ROOT
-from risk_scores_calculation.serializers import CombinedSerializer
+from LSMviewer.common import BASE_DIR, MEDIA_ROOT, LSMviewerProdSettings
+from .serializers import CombinedSerializer
 from .forms import FileForm
 import os
 import time
@@ -18,7 +18,11 @@ from scipy.ndimage import labeled_comprehension
 from numpy import sum, mean, unique, nonzero, clip, log10
 import shutil
 # When running in production, import the STATIC_ROOT directory:
-# from LSMviewer.LSMviewer.production import STATIC_ROOT
+## from LSMviewer.LSMviewer.production import STATIC_ROOT
+# from importlib import import_module
+# production_settings = import_module(LSMviewerProdSettings)
+# STATIC_ROOT = production_settings.STATIC_ROOT
+
 
 # Create your views here.
 def filefield_upload(request,  *args, **kwargs):

@@ -3,7 +3,7 @@
 
 from django.urls import include, path
 from rest_framework import routers
-from risk_scores_calculation.views import RequestResultViewSet
+from .views import RequestResultViewSet
 
 router = routers.DefaultRouter()
 
