@@ -103,7 +103,8 @@ class RequestResultViewSet(ViewSet):
         media_dir = MEDIA_ROOT
         atlas_dir = os.path.join(BASE_DIR, "static/")
         # When running in production, change the directory to:
-        # atlas_dir = STATIC_ROOT
+        if prod_mode:
+            atlas_dir = STATIC_ROOT
 
         if request.is_ajax and request.method == "POST":
             print("Request:", request)
@@ -189,7 +190,8 @@ class RequestResultViewSet(ViewSet):
         media_dir = MEDIA_ROOT
         atlas_dir = os.path.join(BASE_DIR, "static/")
         # When running in production, change the directory to:
-        # atlas_dir = STATIC_ROOT
+        if prod_mode:
+            atlas_dir = STATIC_ROOT
 
         '''read the .xlsx files for the region volumes and the hub scores'''
         hub = load_workbook(f"{atlas_dir}/{'hubscore.xlsx'}")
