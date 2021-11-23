@@ -77,6 +77,7 @@ git pull origin main
 git checkout new_branch_2
 ```
 when modifying the files on the server.
+
 7. `LSMviewer/common.py` contains the general Django settings. The remote server specific settings can be found in `LSMviewer/production.py`. Make sure that DJANGO_SETTINGS_MODULE looks for this file in order to run the application locally. Check this in `wsgi.py`:
 ```
 DJANGO_SETTINGS_MODULE = 'LSMviewer.LSMviewer.production' 
