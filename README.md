@@ -121,7 +121,7 @@ Handles the calculations in python. For the new score, create a function inside 
 Creates request URLs for the API endpoints. Add the path to which the request for the score calculation mentioned above will be found.
 
 ### templates/risk_score_calculation.html
-Handles what is shown on the screeen. For the new score, you can add an option to the form with id="selection_form".
+Handles what is shown on screen. For the new score, you can add an option to the form with id="selection_form".
   
 ### static/riskScoreCalculation.js
 Handles the flow of the operations in html. Add a funtion for the new score that will take as input the file which is uploaded by the user and that creates a POST ajax request looking at the API endpoint's URL previously inserted in the `urls.py`. This way, the new score will be linked to the correct function for calculation in the `views.py`.
